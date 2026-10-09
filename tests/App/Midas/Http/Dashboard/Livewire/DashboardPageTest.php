@@ -1,6 +1,6 @@
 <?php
 
-use App\Prism\Http\Dashboard\Livewire\DashboardPage;
+use App\Midas\Http\Dashboard\Livewire\DashboardPage;
 use Domain\Identity\Models\User;
 use Livewire\Livewire;
 

@@ -87,7 +87,7 @@ Request/Livewire form → validates → builds a Payload → calls an Action →
 ### 6. Other Locations
 
 - Routes: `src/App/<Domain>/Http/Api/V1/Routes/<domain>.php` and `src/App/<Domain>/Http/Dashboard/Routes/<domain>.php`, auto-discovered by `Support\Utils\DomainRouteLoader`. Version folder `V1` maps to the `api/v1` prefix and `api.v1.` name prefix; dashboard routes have no prefix. Route files declare their own `auth`/`guest`/`Authorize` middleware. `routes/console.php` stays in `routes/`.
-- `App\Prism` is reserved for the cross-domain app shell (dashboard, `/` redirect). It has no `Domain\Prism` until real business rules need one.
+- `App\Midas` is reserved for the cross-domain app shell (dashboard, `/` redirect). It has no `Domain\Midas` until real business rules need one.
 - Migrations and factories: `database/` (shared). Factories are named `<Model>Factory` and registered on the model.
 - Blade views: `resources/views/`. Livewire page components: `Dashboard/Livewire/`.
 - Authorization: capabilities are `Permission` enum cases mapped to roles in `Role::permissions()`. Each domain's `App\<Domain>\Providers\<Domain>ServiceProvider` registers them as Gate abilities (and its exception map). Pass the enum itself, never `->value`: `Authorize::using(Permission::ManageUsers)`, `$this->authorize(Permission::ManageUsers)`, `@can(Permission::ManageUsers)`. Record-level rules go in `Domain/<Domain>/Policies` (auto-discovered). Invariants stay in Actions as domain exceptions. Actions receive the acting user as an argument and never read `Auth`.

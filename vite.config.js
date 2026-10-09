@@ -24,7 +24,7 @@ export default defineConfig({
     ]),
     server: {
         cors: {
-            origin: ['https://prism.lndo.site', 'http://prism.lndo.site'],
+            origin: ['https://midas.lndo.site', 'http://midas.lndo.site'],
             credentials: true,
         },
         watch: {

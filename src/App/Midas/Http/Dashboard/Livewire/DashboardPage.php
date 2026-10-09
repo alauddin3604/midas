@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Prism\Http\Dashboard\Livewire;
+namespace App\Midas\Http\Dashboard\Livewire;
 
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;

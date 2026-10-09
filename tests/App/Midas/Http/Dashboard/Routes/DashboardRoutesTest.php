@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Prism\Http\Dashboard\Livewire\DashboardPage;
+use App\Midas\Http\Dashboard\Livewire\DashboardPage;
 use Database\Factories\UserFactory;
 
 use function Pest\Laravel\actingAs;
