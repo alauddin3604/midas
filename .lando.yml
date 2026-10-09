@@ -1,0 +1,23 @@
+name: midas
+recipe: laravel
+config:
+  php: '8.4'
+  webroot: public
+services:
+  appserver:
+    overrides:
+      environment:
+        # Compiled Blade/Livewire classes embed absolute paths (/app here, /Users/... on the host),
+        # so the container keeps its own copy instead of sharing storage/framework/views.
+        VIEW_COMPILED_PATH: /tmp/laravel-views
+  database:
+    portforward: 3333
+  node:
+    type: node:24
+    ssl: true
+    sslExpose: true
+    build:
+      - npm install
+    command: npm run dev
+    ports:
+      - 5173:5173
