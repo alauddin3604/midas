@@ -66,6 +66,7 @@ Request/Livewire form → validates → builds a Payload → calls an Action →
 - **Exceptions**: thrown by Actions, mapped to HTTP/UI responses in the App layer, never inside the Domain.
 - **Reads**: may use model query scopes directly from the App layer. **Writes** must go through an Action.
 - **Events**: dispatched by Actions. Listeners that do I/O (mail, queue, HTTP) live in `App\<Domain>\Listeners`.
+- **Dispatching events**: use the `event(new UserRegistered(...))` helper, never the static `UserRegistered::dispatch(...)`. The explicit `new` gives the IDE and PHPStan the constructor's typed signature. Events extend `Support\Bases\Events\DomainEvent` (dispatched after commit) and do not use the `Dispatchable` trait.
 
 ### 4. Cross-Domain Rules
 

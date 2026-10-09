@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Identity\Actions;
 
+use Domain\Identity\Events\UserRegistered;
 use Domain\Identity\Exceptions\EmailAlreadyRegistered;
 use Domain\Identity\Models\User;
 use Domain\Identity\Payloads\RegisterUserPayload;
@@ -19,6 +20,10 @@ final readonly class RegisterUserAction
             throw EmailAlreadyRegistered::withEmail($payload->email);
         }
 
-        return User::query()->forceCreate($payload->toArray());
+        $user = User::query()->forceCreate($payload->toArray());
+
+        event(new UserRegistered($user->id, $user->email, $user->role->value));
+
+        return $user;
     }
 }

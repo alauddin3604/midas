@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Events\Dispatchable;
+use Support\Bases\Events\DomainEvent;
 use Support\Bases\Exceptions\DomainException;
 
 arch('Domain does not depend on the App layer')
@@ -54,3 +56,14 @@ arch('Domain models are Eloquent models that stay free of business operations')
 arch('Domain enums must be enums')
     ->expect('Domain\*\Enums')
     ->toBeEnums();
+
+arch('Domain events must be final, readonly classes extending the base domain event')
+    ->expect('Domain\*\Events')
+    ->toBeClasses()
+    ->toBeFinal()
+    ->toBeReadonly()
+    ->toExtend(DomainEvent::class);
+
+arch('Domain events are dispatched with the event() helper, not the Dispatchable trait')
+    ->expect('Domain\*\Events')
+    ->not->toUse(Dispatchable::class);

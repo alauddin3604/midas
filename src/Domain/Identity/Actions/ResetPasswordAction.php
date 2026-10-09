@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Identity\Actions;
 
+use Domain\Identity\Events\PasswordReset;
 use Domain\Identity\Exceptions\InvalidPasswordResetToken;
 use Domain\Identity\Models\User;
 use Domain\Identity\Payloads\ResetPasswordPayload;
@@ -28,6 +29,8 @@ final readonly class ResetPasswordAction
                     'password' => $password,
                     'remember_token' => Str::random(60),
                 ])->save();
+
+                event(new PasswordReset($user->id));
             },
         );
 

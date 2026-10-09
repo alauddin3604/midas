@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Identity\Actions;
 
+use Domain\Identity\Events\UserDeleted;
 use Domain\Identity\Exceptions\UserNotFound;
 use Domain\Identity\Models\User;
 
@@ -14,12 +15,14 @@ final readonly class DeleteUserFromEmailAction
      */
     public function execute(string $email): void
     {
-        $deleteCount = User::query()
-            ->where('email', $email)
-            ->delete();
+        $user = User::query()->where('email', $email)->first();
 
-        if ($deleteCount === 0) {
+        if ($user === null) {
             throw UserNotFound::withEmail($email);
         }
+
+        $user->delete();
+
+        event(new UserDeleted($user->id, $user->email, null));
     }
 }

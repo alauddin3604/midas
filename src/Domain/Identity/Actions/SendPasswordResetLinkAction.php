@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Identity\Actions;
 
+use Domain\Identity\Events\PasswordResetLinkRequested;
 use Domain\Identity\Payloads\SendPasswordResetLinkPayload;
 use Illuminate\Contracts\Auth\PasswordBroker;
 
@@ -17,5 +18,7 @@ final readonly class SendPasswordResetLinkAction
     public function execute(SendPasswordResetLinkPayload $payload): void
     {
         $this->broker->sendResetLink(['email' => $payload->email]);
+
+        event(new PasswordResetLinkRequested($payload->email));
     }
 }
