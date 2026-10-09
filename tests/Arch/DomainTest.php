@@ -67,3 +67,7 @@ arch('Domain events must be final, readonly classes extending the base domain ev
 arch('Domain events are dispatched with the event() helper, not the Dispatchable trait')
     ->expect('Domain\*\Events')
     ->not->toUse(Dispatchable::class);
+
+arch('Audit domain stays generic and knows no other domain')
+    ->expect('Domain\Audit')
+    ->not->toUse('Domain\Identity');
