@@ -5,6 +5,13 @@ import { bunny } from 'laravel-vite-plugin/fonts';
 import { defineConfig, lazyPlugins } from 'vite-plus';
 import * as fs from 'fs';
 
+const certPath = '/certs/cert.crt';
+const keyPath = '/certs/cert.key';
+const https =
+    fs.existsSync(certPath) && fs.existsSync(keyPath)
+        ? { cert: fs.readFileSync(certPath), key: fs.readFileSync(keyPath) }
+        : undefined;
+
 export default defineConfig({
     plugins: lazyPlugins(() => [
         frankenUi({
@@ -34,10 +41,7 @@ export default defineConfig({
         hmr: {
             host: 'midas.lndo.site',
         },
-        https: {
-            cert: fs.readFileSync('/certs/cert.crt'),
-            key: fs.readFileSync('/certs/cert.key'),
-        },
+        https,
         watch: {
             ignored: [
                 '**/.agents/**',
