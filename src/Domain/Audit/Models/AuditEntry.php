@@ -26,6 +26,8 @@ use Illuminate\Support\Carbon;
  * @property array<string, array{old: mixed, new: mixed}>|null $changes
  * @property array<string, mixed>|null $context
  * @property Carbon $occurred_at
+ *
+ * @method static AuditEntryQueryBuilder query()
  */
 #[Table('audit_entries', timestamps: false)]
 #[UseFactory(AuditEntryFactory::class)]
