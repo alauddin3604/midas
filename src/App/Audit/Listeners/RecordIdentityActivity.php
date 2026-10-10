@@ -16,6 +16,7 @@ use Domain\Identity\Events\UserRegistered;
 use Domain\Identity\Events\UserUpdated;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Support\Facades\Context;
+use Throwable;
 
 /**
  * Translates Identity events into audit entries; the only place that knows both domains.
@@ -95,6 +96,8 @@ final readonly class RecordIdentityActivity
     }
 
     /**
+     * Record the entry without ever breaking the operation that is being audited.
+     *
      * @param  array<string, array{old: mixed, new: mixed}>|null  $changes
      */
     private function record(
@@ -104,15 +107,19 @@ final readonly class RecordIdentityActivity
         ?string $actorId = null,
         ?array $changes = null,
     ): void {
-        $this->action->execute(new RecordAuditEntryPayload(
-            event: $name,
-            subjectType: $subjectType,
-            subjectId: $subjectId,
-            occurredAt: now(),
-            actorId: $actorId,
-            changes: $changes,
-            context: Context::getHidden(CaptureAuditContext::KEY),
-        ));
+        try {
+            $this->action->execute(new RecordAuditEntryPayload(
+                event: $name,
+                subjectType: $subjectType,
+                subjectId: $subjectId,
+                occurredAt: now(),
+                actorId: $actorId,
+                changes: $changes,
+                context: Context::getHidden(CaptureAuditContext::KEY),
+            ));
+        } catch (Throwable $exception) {
+            report($exception);
+        }
     }
 
     private function webGuardUserId(): ?string

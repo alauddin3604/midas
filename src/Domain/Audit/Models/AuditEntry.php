@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Attributes\UseEloquentBuilder;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -32,7 +33,7 @@ use Illuminate\Support\Carbon;
 class AuditEntry extends Model
 {
     /** @use HasFactory<AuditEntryFactory> */
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, MassPrunable;
 
     /**
      * Get the attributes that should be cast.
@@ -46,5 +47,13 @@ class AuditEntry extends Model
             'context' => 'array',
             'occurred_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Get the entries older than the configured retention period.
+     */
+    public function prunable(): AuditEntryQueryBuilder
+    {
+        return static::query()->occurredBefore(now()->subDays(config()->integer('audit.retention_days')));
     }
 }

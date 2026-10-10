@@ -44,4 +44,12 @@ final class AuditEntryQueryBuilder extends Builder
             ->when($from, fn (Builder $query, DateTimeInterface $from): Builder => $query->where('occurred_at', '>=', $from))
             ->when($until, fn (Builder $query, DateTimeInterface $until): Builder => $query->where('occurred_at', '<=', $until));
     }
+
+    /**
+     * Match entries that occurred before the moment.
+     */
+    public function occurredBefore(DateTimeInterface $moment): static
+    {
+        return $this->where('occurred_at', '<', $moment);
+    }
 }

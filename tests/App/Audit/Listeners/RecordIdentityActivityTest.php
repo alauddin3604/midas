@@ -11,7 +11,10 @@ use Domain\Identity\Events\UserDeleted;
 use Domain\Identity\Events\UserRegistered;
 use Domain\Identity\Events\UserUpdated;
 use Domain\Identity\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Context;
+use Illuminate\Support\Facades\Exceptions;
+use Illuminate\Support\Facades\Schema;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
@@ -95,4 +98,13 @@ it('records nothing for unrelated events', function (): void {
     event('some.other.event');
 
     assertDatabaseCount('audit_entries', 0);
+});
+
+it('reports a failed write instead of breaking the audited operation', function (): void {
+    Exceptions::fake();
+    Schema::drop('audit_entries');
+
+    event(new UserAuthenticated('user-1'));
+
+    Exceptions::assertReported(QueryException::class);
 });
