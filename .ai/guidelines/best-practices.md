@@ -90,7 +90,7 @@ Use named arguments when constructing Payloads or calling a method with optional
 
 ### Eloquent attributes over properties
 
-Configure models with attributes instead of class properties: `#[Table]`, `#[Fillable]`, `#[Hidden]` and `#[UseFactory]`, and `#[Scope]` for query scopes.
+Configure models with attributes instead of class properties: `#[Table]`, `#[Fillable]`, `#[Hidden]`, `#[UseFactory]` and `#[UseEloquentBuilder]`.
 
 ```diff
 - protected $table = 'users';
@@ -109,4 +109,34 @@ Use the `now()` helper for the current time, never `new DateTime()` or `Carbon::
 ```diff
 - 'occurred_at' => new DateTimeImmutable,
 + 'occurred_at' => now(),
+```
+
+### Custom query builders
+
+Do not write scope methods (`scopeX()` or `#[Scope]`) on a model. Give the model its own query builder class named `<Model>QueryBuilder`, extending `Illuminate\Database\Eloquent\Builder`, place it in `src/Domain/<Domain>/QueryBuilders/` and put every scope there as a plain public method. Attach it to the model with `#[UseEloquentBuilder]`.
+
+```diff
++ /**
++  * @extends Builder<AuditEntry>
++  */
++ final class AuditEntryQueryBuilder extends Builder
++ {
++     /**
++      * Match entries of the given event name.
++      */
++     public function ofEvent(?string $event): static
++     {
++         return $this->when($event, fn (Builder $query, string $event) => $query->where('event', $event));
++     }
++ }
+
++ #[UseEloquentBuilder(AuditEntryQueryBuilder::class)]
+  class AuditEntry extends Model
+  {
+-     #[Scope]
+-     protected function ofEvent(Builder $query, ?string $event): void
+-     {
+-         ...
+-     }
+  }
 ```

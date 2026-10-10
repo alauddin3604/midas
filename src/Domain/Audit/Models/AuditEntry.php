@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Domain\Audit\Models;
 
 use Database\Factories\AuditEntryFactory;
+use Domain\Audit\QueryBuilders\AuditEntryQueryBuilder;
 use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\UseEloquentBuilder;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +28,7 @@ use Illuminate\Support\Carbon;
  */
 #[Table('audit_entries', timestamps: false)]
 #[UseFactory(AuditEntryFactory::class)]
+#[UseEloquentBuilder(AuditEntryQueryBuilder::class)]
 class AuditEntry extends Model
 {
     /** @use HasFactory<AuditEntryFactory> */

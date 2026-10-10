@@ -6,12 +6,12 @@ namespace Domain\Identity\Models;
 
 use Database\Factories\UserFactory;
 use Domain\Identity\Enums\Role;
+use Domain\Identity\QueryBuilders\UserQueryBuilder;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Attributes\UseEloquentBuilder;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -35,6 +35,7 @@ use Illuminate\Support\Carbon;
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 #[UseFactory(UserFactory::class)]
+#[UseEloquentBuilder(UserQueryBuilder::class)]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
@@ -52,23 +53,5 @@ class User extends Authenticatable
             'password' => 'hashed',
             'role' => Role::class,
         ];
-    }
-
-    /**
-     * Match users whose name or email contains the term.
-     *
-     * @param  Builder<User>  $query
-     */
-    #[Scope]
-    protected function search(Builder $query, ?string $term): void
-    {
-        if ($term === null || $term === '') {
-            return;
-        }
-
-        $query->where(function (Builder $query) use ($term): void {
-            $query->where('name', 'like', "%{$term}%")
-                ->orWhere('email', 'like', "%{$term}%");
-        });
     }
 }

@@ -93,7 +93,7 @@ Use named arguments when constructing Payloads or calling a method with optional
 
 ### Eloquent attributes over properties
 
-Configure models with attributes instead of class properties: `#[Table]`, `#[Fillable]`, `#[Hidden]` and `#[UseFactory]`, and `#[Scope]` for query scopes.
+Configure models with attributes instead of class properties: `#[Table]`, `#[Fillable]`, `#[Hidden]`, `#[UseFactory]` and `#[UseEloquentBuilder]`.
 
 ```diff
 - protected $table = 'users';
@@ -114,13 +114,43 @@ Use the `now()` helper for the current time, never `new DateTime()` or `Carbon::
 + 'occurred_at' => now(),
 ```
 
+### Custom query builders
+
+Do not write scope methods (`scopeX()` or `#[Scope]`) on a model. Give the model its own query builder class named `<Model>QueryBuilder`, extending `Illuminate\Database\Eloquent\Builder`, place it in `src/Domain/<Domain>/QueryBuilders/` and put every scope there as a plain public method. Attach it to the model with `#[UseEloquentBuilder]`.
+
+```diff
++ /**
++  * @extends Builder<AuditEntry>
++  */
++ final class AuditEntryQueryBuilder extends Builder
++ {
++     /**
++      * Match entries of the given event name.
++      */
++     public function ofEvent(?string $event): static
++     {
++         return $this->when($event, fn (Builder $query, string $event) => $query->where('event', $event));
++     }
++ }
+
++ #[UseEloquentBuilder(AuditEntryQueryBuilder::class)]
+  class AuditEntry extends Model
+  {
+-     #[Scope]
+-     protected function ofEvent(Builder $query, ?string $event): void
+-     {
+-         ...
+-     }
+  }
+```
+
 === .ai/code-architecture rules ===
 
 ## Application Structure & Architecture
 
 ### 1. Where Things Live
 
-Domain code lives in `src/Domain/<DomainName>/` — one folder per business capability. HTTP plumbing (controllers, requests, responses) stays in `src/App/<DomainName>/Http/`, but everything that describes the business model — actions, payloads, models, enums — sits inside its domain.
+Domain code lives in `src/Domain/<DomainName>/` — one folder per business capability. HTTP plumbing (controllers, requests, responses) stays in `src/App/<DomainName>/Http/`, but everything that describes the business model — actions, payloads, models, query builders, enums — sits inside its domain.
 
 ```
 src/
@@ -148,6 +178,7 @@ src/
 │       ├── Exceptions/
 │       ├── Models/
 │       ├── Payloads/
+│       ├── QueryBuilders/         ← <Model>QueryBuilder: every query scope of a model
 │       └── ValueObjects/
 └── Support/
     ├── Bases/
@@ -180,9 +211,9 @@ Request/Livewire form → validates → builds a Payload → calls an Action →
 
 - **Action**: one business operation, `final readonly`, single public `execute()` method. Throws domain Exceptions. This is the domain's only public write API.
 - **Payload**: `final readonly` typed DTO. Built by the Request (`payload()`) or by the Livewire component.
-- **Model**: data access, relationships, casts, query scopes. No business operations.
+- **Model**: data access, relationships, casts. No business operations. Query scopes live in the model's `<Model>QueryBuilder` (`Domain\<Domain>\QueryBuilders`), attached with `#[UseEloquentBuilder]`.
 - **Exceptions**: thrown by Actions, mapped to HTTP/UI responses in the App layer, never inside the Domain.
-- **Reads**: may use model query scopes directly from the App layer. **Writes** must go through an Action.
+- **Reads**: may use a model's query builder methods directly from the App layer. **Writes** must go through an Action.
 - **Events**: dispatched by Actions. Listeners that do I/O (mail, queue, HTTP) live in `App\<Domain>\Listeners`.
 - **Dispatching events**: use the `event(new UserRegistered(...))` helper, never the static `UserRegistered::dispatch(...)`. The explicit `new` gives the IDE and PHPStan the constructor's typed signature. Events extend `Support\Bases\Events\DomainEvent` (dispatched after commit) and do not use the `Dispatchable` trait.
 

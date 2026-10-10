@@ -11,7 +11,8 @@ it('grants every permission to an admin', function () {
 
 it('limits a member to dashboard access', function () {
     expect(Role::Member->grants(Permission::AccessDashboard))->toBeTrue()
-        ->and(Role::Member->grants(Permission::ManageUsers))->toBeFalse();
+        ->and(Role::Member->grants(Permission::ManageUsers))->toBeFalse()
+        ->and(Role::Member->grants(Permission::ViewAuditLog))->toBeFalse();
 });
 
 it('grants every permission to at least one role', function () {

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Support\Bases\Events\DomainEvent;
@@ -71,3 +73,14 @@ arch('Domain events are dispatched with the event() helper, not the Dispatchable
 arch('Audit domain stays generic and knows no other domain')
     ->expect('Domain\Audit')
     ->not->toUse('Domain\Identity');
+
+arch('Domain models keep query scopes in their query builder')
+    ->expect('Domain\*\Models')
+    ->not->toUse(Scope::class);
+
+arch('Domain query builders must be final Eloquent builders suffixed with QueryBuilder')
+    ->expect('Domain\*\QueryBuilders')
+    ->toBeClasses()
+    ->toBeFinal()
+    ->toExtend(Builder::class)
+    ->toHaveSuffix('QueryBuilder');
