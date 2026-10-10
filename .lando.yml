@@ -5,6 +5,15 @@ config:
   webroot: public
 services:
   appserver:
+    build_as_root:
+      - curl -sL https://deb.nodesource.com/setup_24.x | bash -
+      - apt-get update -y
+      - apt-get install -y nodejs
+    build:
+      - npm install
+    ssl: true
+    ports:
+      - '5173:5173'
     overrides:
       environment:
         # Compiled Blade/Livewire classes embed absolute paths (/app here, /Users/... on the host),
@@ -12,12 +21,9 @@ services:
         VIEW_COMPILED_PATH: /tmp/laravel-views
   database:
     portforward: 3333
+
+tooling:
+  npm:
+    service: appserver
   node:
-    type: node:24
-    ssl: true
-    sslExpose: true
-    build:
-      - npm install
-    command: npm run dev
-    ports:
-      - 5173:5173
+    service: appserver
