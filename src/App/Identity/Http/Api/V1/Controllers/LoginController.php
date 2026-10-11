@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace App\Identity\Http\Api\V1\Controllers;
 
 use App\Identity\Http\Api\V1\Requests\LoginRequest;
-use App\Identity\Http\Api\V1\Resources\UserResource;
 use Domain\Identity\Actions\AuthenticateUserAction;
 use Domain\Identity\Exceptions\InvalidCredentials;
-use Illuminate\Auth\AuthManager;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Support\Bases\Controllers\Controller;
 
 final class LoginController extends Controller
 {
-    public function __invoke(LoginRequest $request, AuthenticateUserAction $action, AuthManager $auth): UserResource
+    public function __invoke(LoginRequest $request, AuthenticateUserAction $action): JsonResponse
     {
         try {
             $user = $action->execute($request->payload());
@@ -22,9 +22,12 @@ final class LoginController extends Controller
             throw ValidationException::withMessages(['email' => [$exception->getMessage()]]);
         }
 
-        $auth->guard('web')->login($user);
-        $request->session()->regenerate();
+        $token = $user->createToken(Str::limit($request->userAgent() ?? $user->email, 255, ''));
 
-        return new UserResource($user);
+        return response()->json([
+            'data' => [
+                'token' => $token->plainTextToken,
+            ],
+        ]);
     }
 }

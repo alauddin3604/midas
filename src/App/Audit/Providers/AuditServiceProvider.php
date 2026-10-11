@@ -24,6 +24,8 @@ final class AuditServiceProvider extends ServiceProvider
 
         $router->pushMiddlewareToGroup('web', CaptureAuditContext::class);
 
+        $router->pushMiddlewareToGroup('api', CaptureAuditContext::class);
+
         $this->callAfterResolving(
             Schedule::class,
             fn (Schedule $schedule) => $schedule

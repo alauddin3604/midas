@@ -36,3 +36,15 @@ it('refuses an invalid token without dispatching an event', function (): void {
         Event::assertNotDispatched(PasswordReset::class);
     }
 })->throws(InvalidPasswordResetToken::class);
+
+it('revokes every API token of the user', function (): void {
+    $user = UserFactory::new()->create();
+    $user->createToken('phone');
+    $user->createToken('laptop');
+
+    app(ResetPasswordAction::class)->execute(
+        new ResetPasswordPayload($user->email, Password::createToken($user), 'new-secret-password'),
+    );
+
+    expect($user->tokens()->count())->toBe(0);
+});

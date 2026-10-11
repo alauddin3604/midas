@@ -24,7 +24,7 @@ final class DomainRouteLoader
             $slug = strtolower($version);
 
             foreach (self::files("Http/Api/{$version}/Routes") as $file) {
-                Route::middleware('web')
+                Route::middleware('api')
                     ->prefix("api/{$slug}")
                     ->name("api.{$slug}.")
                     ->group($file);

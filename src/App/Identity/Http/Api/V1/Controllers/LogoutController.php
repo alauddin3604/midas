@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Identity\Http\Api\V1\Controllers;
 
-use Illuminate\Auth\AuthManager;
+use Domain\Identity\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Support\Bases\Controllers\Controller;
 
 final class LogoutController extends Controller
 {
-    public function __invoke(Request $request, AuthManager $auth): Response
+    public function __invoke(Request $request): Response
     {
-        $auth->guard('web')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        /** @var User $user */
+        $user = $request->user();
+
+        $user->currentAccessToken()->delete();
 
         return response()->noContent();
     }

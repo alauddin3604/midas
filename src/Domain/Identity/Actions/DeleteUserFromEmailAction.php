@@ -21,6 +21,7 @@ final readonly class DeleteUserFromEmailAction
             throw UserNotFound::withEmail($email);
         }
 
+        $user->tokens()->delete();
         $user->delete();
 
         event(new UserDeleted($user->id, $user->email, null));

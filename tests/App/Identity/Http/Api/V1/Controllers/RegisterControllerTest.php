@@ -48,5 +48,5 @@ it('answers 409 for an email that is already registered', function (): void {
 it('validates the payload', function (): void {
     postJson('/api/v1/register', [])
         ->assertUnprocessable()
-        ->assertJsonValidationErrors(['name', 'email', 'password']);
+        ->assertJsonPath('errors.*.field', ['name', 'email', 'password']);
 });

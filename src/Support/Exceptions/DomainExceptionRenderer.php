@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Support\Bases\Exceptions\DomainException;
 use Support\Contracts\MapsDomainExceptions;
+use Support\Utils\ApiErrorResponse;
 use Throwable;
 
 final class DomainExceptionRenderer
@@ -19,14 +20,14 @@ final class DomainExceptionRenderer
 
     public function render(Throwable $e, Request $request): ?JsonResponse
     {
-        if (! $e instanceof DomainException || ! $request->expectsJson()) {
+        if (! $e instanceof DomainException || ! ApiErrorResponse::isExpectedBy($request)) {
             return null;
         }
 
         foreach ($this->maps as $map) {
             foreach ($map->statusCodes() as $class => $status) {
                 if ($e instanceof $class) {
-                    return response()->json(['message' => $e->getMessage()], $status);
+                    return ApiErrorResponse::make($e->getMessage(), $status);
                 }
             }
         }

@@ -2,18 +2,33 @@
 
 use Domain\Identity\Models\User;
 
-use function Pest\Laravel\actingAs;
-use function Pest\Laravel\assertGuest;
+use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\postJson;
+use function Pest\Laravel\withToken;
 
-it('logs a user out', function () {
+it('revokes only the token used for the request', function () {
     $user = User::factory()->create();
+    $current = $user->createToken('phone')->plainTextToken;
+    $other = $user->createToken('laptop');
 
-    actingAs($user)->postJson('/api/v1/logout')->assertNoContent();
+    withToken($current)->postJson('/api/v1/logout')->assertNoContent();
 
-    assertGuest();
+    assertDatabaseCount('personal_access_tokens', 1);
+    expect($user->tokens()->first()->is($other->accessToken))->toBeTrue();
 });
 
-it('requires authentication to log out', function () {
-    postJson('/api/v1/logout')->assertUnauthorized();
+it('rejects the token after it has been revoked', function () {
+    $token = User::factory()->create()->createToken('phone')->plainTextToken;
+
+    withToken($token)->postJson('/api/v1/logout')->assertNoContent();
+
+    app('auth')->forgetGuards();
+
+    withToken($token)->postJson('/api/v1/logout')->assertUnauthorized();
+});
+
+it('returns 401 when no token is provided', function () {
+    postJson('/api/v1/logout')
+        ->assertUnauthorized()
+        ->assertExactJson(['message' => 'Unauthenticated.', 'errors' => []]);
 });

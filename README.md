@@ -41,6 +41,7 @@ before using the app anywhere other than local development.
 | Variable | Default | Purpose |
 |---|---|---|
 | `AUDIT_RETENTION_DAYS` | `365` | Audit entries older than this are pruned by the daily schedule |
+| `SANCTUM_EXPIRATION` | `10080` | Minutes until an API token expires (`0` disables expiry) |
 
 ## What's included
 
@@ -49,7 +50,7 @@ before using the app anywhere other than local development.
 | Identity domain | `src/Domain/Identity` | Register, authenticate, update, delete users; password reset; `Role` and `Permission` enums |
 | Audit domain | `src/Domain/Audit` | Generic append-only `AuditEntry`; knows nothing about other domains |
 | Dashboard | `src/App/*/Http/Dashboard` | Livewire pages: login, forgot/reset password, users CRUD, audit log |
-| API v1 | `src/App/Identity/Http/Api/V1` | `POST /api/v1/register`, `/login`, `/logout` |
+| API v1 | `src/App/Identity/Http/Api/V1` | `POST /api/v1/register`, `/login`, `/logout`; Sanctum bearer tokens, see [REST API](docs/rest-api.md) |
 
 ## Project layout
 

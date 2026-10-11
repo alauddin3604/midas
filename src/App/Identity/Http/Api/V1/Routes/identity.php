@@ -16,5 +16,5 @@ Route::post('login', LoginController::class)
     ->name('login');
 
 Route::post('logout', LogoutController::class)
-    ->middleware('auth')
+    ->middleware('auth:sanctum')
     ->name('logout');

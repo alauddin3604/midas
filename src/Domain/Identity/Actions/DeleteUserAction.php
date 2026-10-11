@@ -19,6 +19,7 @@ final readonly class DeleteUserAction
             throw CannotModifyOwnAccount::deletion();
         }
 
+        $user->tokens()->delete();
         $user->delete();
 
         event(new UserDeleted($user->id, $user->email, $actor->id));

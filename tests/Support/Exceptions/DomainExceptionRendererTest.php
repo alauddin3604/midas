@@ -41,7 +41,10 @@ it('renders a mapped domain exception as JSON with its status and message', func
     $response = $renderer->render(EmailAlreadyRegistered::withEmail('jane@example.com'), jsonRequest());
 
     expect($response->getStatusCode())->toBe(Response::HTTP_CONFLICT)
-        ->and($response->getData(true))->toBe(['message' => 'A user with email [jane@example.com] is already registered.']);
+        ->and($response->getData(true))->toBe([
+            'message' => 'A user with email [jane@example.com] is already registered.',
+            'errors' => [],
+        ]);
 });
 
 it('finds the status in a later map when earlier maps do not list the exception', function (): void {
