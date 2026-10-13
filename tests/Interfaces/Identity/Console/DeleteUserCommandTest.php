@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Database\Factories\UserFactory;
-use Domain\Identity\Actions\DeleteUserFromEmailAction;
 
 use function Pest\Laravel\artisan;
 use function Pest\Laravel\assertModelMissing;
