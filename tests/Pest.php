@@ -20,5 +20,6 @@ pest()
     ->in(
         'App',
         'Domain/*/Actions',
+        'Interfaces',
         'Support',
     );

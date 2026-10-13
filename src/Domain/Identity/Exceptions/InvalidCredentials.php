@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Identity\Exceptions;
 
-use Support\Bases\Exceptions\DomainException;
+use Support\Bases\Exceptions\UnauthorizedException;
 
-final class InvalidCredentials extends DomainException
+final class InvalidCredentials extends UnauthorizedException
 {
     public static function provided(): self
     {

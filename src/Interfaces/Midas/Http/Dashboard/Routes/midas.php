@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+use Domain\Identity\Enums\Permission;
+use Illuminate\Auth\Middleware\Authorize;
+use Illuminate\Support\Facades\Route;
+use Interfaces\Midas\Http\Dashboard\Livewire\DashboardPage;
+
+Route::redirect('/', '/dashboard')->name('home');
+
+Route::middleware([
+    'auth',
+    Authorize::using(Permission::AccessDashboard),
+])->group(function (): void {
+    Route::livewire('dashboard', DashboardPage::class)->name('dashboard');
+});

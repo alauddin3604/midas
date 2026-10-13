@@ -17,7 +17,9 @@ final readonly class ArchiveProjectPayload
 
 ```php
 // Exceptions/ProjectAlreadyArchived.php
-final class ProjectAlreadyArchived extends DomainException
+use Support\Bases\Exceptions\ConflictException;
+
+final class ProjectAlreadyArchived extends ConflictException
 {
     public static function withId(string $id): self
     {
@@ -56,9 +58,9 @@ Checklist:
 - Scopes go in a `ProjectQueryBuilder`, not on the model.
 - Use `now()`, never `new DateTime()`.
 
-## 2. App: delivery
+## 2. Interfaces: delivery
 
-Create the pieces under `src/App/Projects/`.
+Create the pieces under `src/Interfaces/Projects/`.
 
 - **Request** (`Http/Api/V1/Requests/ArchiveRequest.php`): validate input and expose `payload()`.
 - **Controller** (`Http/Api/V1/Controllers/ArchiveController.php`): invokable, `final`, extends
@@ -69,23 +71,16 @@ Create the pieces under `src/App/Projects/`.
   `Http/Dashboard/Routes/projects.php`. It is discovered automatically; declare your own
   middleware.
 
-## 3. Wire the domain (new domain only)
+## 3. Wire the domain (new domain and when needed only)
 
-1. Add `src/App/Projects/Providers/ProjectsServiceProvider.php` and register it in
+1. Add `src/Interfaces/Projects/Providers/ProjectsServiceProvider.php` and register it in
    `bootstrap/providers.php`.
-2. Map domain exceptions to statuses with an `ProjectsExceptionMap` implementing
-   `Support\Contracts\MapsDomainExceptions`, tagged in `register()`:
-
-   ```php
-   $this->app->tag([ProjectsExceptionMap::class], MapsDomainExceptions::TAG);
-   ```
-
-3. For new capabilities, add `Permission` cases, grant them in `Role::permissions()`, and protect
+2. For new capabilities, add `Permission` cases, grant them in `Role::permissions()`, and protect
    routes with `Authorize::using(Permission::X)`.
 
 ## 4. React to it elsewhere (optional)
 
-If another domain must react, add a listener in `App\<Domain>\Listeners` that translates your event
+If another domain must react, add a listener in `Interfaces\<Domain>\Listeners` that translates your event
 into that domain's Payload and Action, then subscribe it in that domain's provider. Never call the
 other domain's models directly. See `RecordIdentityActivity` for the pattern.
 
@@ -99,5 +94,5 @@ composer test    # lint, static analysis, full suite
 
 - `tests/Domain/Projects/Actions/ArchiveProjectActionTest.php`: test the Action directly, including
   the failure path.
-- `tests/App/Projects/...`: test controllers or Livewire pages through HTTP/Livewire.
+- `tests/Interfaces/Projects/...`: test controllers or Livewire pages through HTTP/Livewire.
 - Run `vendor/bin/pint --dirty` before committing.

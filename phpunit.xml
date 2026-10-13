@@ -8,11 +8,14 @@
         <testsuite name="Arch">
             <directory>tests/Arch</directory>
         </testsuite>
-        <testsuite name="App">
+            <testsuite name="App">
             <directory>tests/App</directory>
         </testsuite>
         <testsuite name="Domain">
             <directory>tests/Domain</directory>
+        </testsuite>
+        <testsuite name="Interfaces">
+            <directory>tests/Interfaces</directory>
         </testsuite>
         <testsuite name="Support">
             <directory>tests/Support</directory>

@@ -1,8 +1,8 @@
 <?php
 
-use App\Audit\Providers\AuditServiceProvider;
-use App\Identity\Providers\IdentityServiceProvider;
-use Support\Providers\AppServiceProvider;
+use App\Providers\AppServiceProvider;
+use Interfaces\Audit\Providers\AuditServiceProvider;
+use Interfaces\Identity\Providers\IdentityServiceProvider;
 
 return [
     AppServiceProvider::class,

@@ -1,24 +1,57 @@
 # Architecture
 
-Midas separates **what the business does** (Domain) from **how it is delivered** (App). The split
+Midas separates **what the business does** (Domain) from **how it is delivered** (Interfaces). The split
 is enforced by architecture tests in `tests/Arch`, so a violation fails the suite.
 
 ## Layers
 
+Dependencies point one way only:
+
+    App → Interfaces → Domain → Support
+
+(`App` may use anything; `Interfaces` may use `Domain` and `Support`; `Domain` may use `Support`;
+`Support` uses nothing of ours.)
+
 | Layer | Namespace | Responsibility |
 |---|---|---|
+| App | `App\` | Wiring only: bootstrap, service providers, route and command discovery, exception-to-response handlers, schedule. |
+| Interfaces | `Interfaces\<Domain>\` | Delivery: HTTP (routes, controllers, requests, resources, middleware), Livewire, ViewModels, console, listeners, jobs, per-domain providers (e.g. Gate abilities). Turns input into Payloads, calls one Action, formats output. |
 | Domain | `Domain\<Domain>\` | Business rules and data. Knows nothing about HTTP, Livewire, queues or the console. |
-| App | `App\<Domain>\` | Delivery: HTTP, Livewire, console, listeners, jobs. Turns input into Payloads, calls Actions, formats output. |
 | Support | `Support\` | Infrastructure with no business meaning: base classes, providers, utils. |
 
-Rules:
+### Rules:
 
-- `Domain` never imports from `App`, Livewire, `Illuminate\Http`, `Illuminate\Routing`,
-  `Illuminate\Console` or the `Auth`/`Request` facades.
-- `Support` never imports from `Domain` or `App`.
-- Controllers, Livewire components and commands contain no business rules; they call one Action.
-- A domain may use another domain's Actions, Payloads, Enums and ValueObjects, but never its
-  Models (other than holding an ID). Cross-domain side effects go through Events.
+**Domain**
+- May use Eloquent, `Illuminate\Support` and Support classes.
+- Never imports `App`, `Interfaces`, Livewire, `Illuminate\Http`, `Illuminate\Routing`, `Illuminate\Console` or the `Auth`/`Request` facades.
+- Never dispatches jobs or touches listeners. Actions only fire Events.
+- Exceptions extend a category from `Support\Bases\Exceptions` and never carry HTTP status codes.
+
+**Interfaces**
+- Never imports `App`.
+- Controllers, Livewire components, commands, listeners and jobs contain no business rules; they call one Action.
+- One domain's Interfaces never import another's, except `Midas`, which nothing may import.
+
+**Support**
+- Never imports `Domain`, `Interfaces` or `App`.
+- `Bases/` holds classes to extend; `Http/` holds helpers to use or compose.
+
+**Cross-domain**
+- A domain may use another domain's Actions, Payloads, Enums and ValueObjects, but never its Models (other than holding an ID).
+- Cross-domain side effects go through Events. The reacting domain handles them in a Listener under its own `Interfaces/<Domain>/Listeners/`, which calls an Action.
+
+### Where things go
+
+| Thing | Location |
+|---|---|
+| Global middleware | `Interfaces/Midas/Http/Middleware/` |
+| Surface-specific middleware | `Interfaces/<Domain>/Http/<Surface>/Middleware/` |
+| Route files | `Interfaces/<Domain>/Http/<Surface>/Routes/` |
+| Domain exception → HTTP status map | `App/Exceptions/` |
+
+### Midas
+
+`Interfaces/Midas` is the application shell (home page, layout, global middleware). It has no matching `Domain/Midas`. Business auth (login, reset) belongs to `Identity`, not `Midas`.
 
 ## Building blocks
 
@@ -101,7 +134,7 @@ as domain exceptions.
 
 Identity actions fire events (`UserRegistered`, `UserUpdated`, `UserDeleted`, `UserAuthenticated`,
 `UserAuthenticationFailed`, `PasswordResetLinkRequested`, `PasswordReset`).
-`App\Audit\Listeners\RecordIdentityActivity` is the only class that knows both domains: it
+`Interfaces\Audit\Listeners\RecordIdentityActivity` is the only class that knows both domains: it
 translates each event into a `RecordAuditEntryPayload` and calls `RecordAuditEntryAction`.
 
 - The `Audit` domain is generic and may not use `Domain\Identity` (arch-tested).
@@ -112,18 +145,18 @@ translates each event into a `RecordAuditEntryPayload` and calls `RecordAuditEnt
 
 ## Routing
 
-Route files are auto-discovered by `Support\Utils\DomainRouteLoader`:
+Route files are auto-discovered by `App\Routing\DomainRouteLoader`:
 
 | File | Prefix | Name prefix |
 |---|---|---|
-| `src/App/<D>/Http/Dashboard/Routes/*.php` | none | none |
-| `src/App/<D>/Http/Api/V1/Routes/*.php` | `api/v1` | `api.v1.` |
+| `src/Interfaces/<D>/Http/Dashboard/Routes/*.php` | none | none |
+| `src/Interfaces/<D>/Http/Api/V1/Routes/*.php` | `api/v1` | `api.v1.` |
 
 Route files declare their own `auth` / `guest` / `Authorize` middleware. `App\Midas` is reserved
 for the cross-domain app shell (the dashboard page and the `/` redirect).
 
 ## Tests
 
-`tests/App`, `tests/Domain` and `tests/Support` mirror `src/`; `tests/Arch` holds the layer rules.
+`tests/App`, `tests/Domain`, `tests/Interfaces` and `tests/Support` mirror `src/`; `tests/Arch` holds the layer rules.
 Test every Action directly. Test controllers and Livewire pages through HTTP/Livewire, which also
 covers their requests, resources and routes.

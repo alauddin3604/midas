@@ -85,7 +85,7 @@ Request/Livewire form → validates → builds a Payload → calls an Action →
 
 ### 6. Other Locations
 
-- Routes: `src/App/<Domain>/Http/Api/V1/Routes/<domain>.php` and `src/App/<Domain>/Http/Dashboard/Routes/<domain>.php`, auto-discovered by `Support\Utils\DomainRouteLoader`. Version folder `V1` maps to the `api/v1` prefix and `api.v1.` name prefix; dashboard routes have no prefix. Route files declare their own `auth`/`guest`/`Authorize` middleware. `routes/console.php` stays in `routes/`.
+- Routes: `src/App/<Domain>/Http/Api/V1/Routes/<domain>.php` and `src/App/<Domain>/Http/Dashboard/Routes/<domain>.php`, auto-discovered by `App\Routing\DomainRouteLoader`. Version folder `V1` maps to the `api/v1` prefix and `api.v1.` name prefix; dashboard routes have no prefix. Route files declare their own `auth`/`guest`/`Authorize` middleware. `routes/console.php` stays in `routes/`.
 - `App\Midas` is reserved for the cross-domain app shell (dashboard, `/` redirect). It has no `Domain\Midas` until real business rules need one.
 - Migrations and factories: `database/` (shared). Factories are named `<Model>Factory` and registered on the model.
 - Blade views: `resources/views/`. Livewire page components: `Dashboard/Livewire/`.

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Identity\Exceptions;
 
-use Support\Bases\Exceptions\DomainException;
+use Support\Bases\Exceptions\NotFoundException;
 
-final class UserNotFound extends DomainException
+final class UserNotFound extends NotFoundException
 {
     public static function withEmail(string $email): self
     {
