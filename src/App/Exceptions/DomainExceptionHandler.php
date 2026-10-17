@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Support\Bases\Exceptions\ConflictException;
 use Support\Bases\Exceptions\DomainException;
 use Support\Bases\Exceptions\ForbiddenException;
+use Support\Bases\Exceptions\InternalServerErrorException;
 use Support\Bases\Exceptions\NotFoundException;
 use Support\Bases\Exceptions\UnauthorizedException;
 use Support\Bases\Exceptions\UnprocessableException;
@@ -23,6 +24,7 @@ final class DomainExceptionHandler
         NotFoundException::class => Response::HTTP_NOT_FOUND,
         ConflictException::class => Response::HTTP_CONFLICT,
         UnprocessableException::class => Response::HTTP_UNPROCESSABLE_ENTITY,
+        InternalServerErrorException::class => Response::HTTP_INTERNAL_SERVER_ERROR,
     ];
 
     /**

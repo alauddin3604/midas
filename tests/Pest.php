@@ -1,5 +1,7 @@
 <?php
 
+use Database\Factories\UserFactory;
+use Domain\Identity\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,3 +25,8 @@ pest()
         'Interfaces',
         'Support',
     );
+
+function createUser(array $attributes = []): User
+{
+    return UserFactory::new()->create($attributes);
+}

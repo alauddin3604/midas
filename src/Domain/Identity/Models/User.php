@@ -27,6 +27,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $email
  * @property Carbon|null $email_verified_at
  * @property string $password
+ * @property Carbon|null $password_changed_at
  * @property Role $role
  * @property string|null $remember_token
  * @property Carbon|null $created_at
@@ -54,7 +55,17 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'password_changed_at' => 'datetime',
             'role' => Role::class,
         ];
+    }
+
+    /**
+     * Update the user's password and set the password changed timestamp.
+     */
+    public function updatePassword(string $password): void
+    {
+        $this->password = $password;
+        $this->password_changed_at = Carbon::now();
     }
 }
