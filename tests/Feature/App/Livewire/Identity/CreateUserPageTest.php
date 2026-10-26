@@ -1,9 +1,9 @@
 <?php
 
+use App\Livewire\Identity\CreateUserPage;
 use Domain\Identity\Enums\Role;
 use Domain\Identity\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Livewire\Identity\CreateUserPage;
 use Livewire\Livewire;
 
 use function Pest\Laravel\actingAs;

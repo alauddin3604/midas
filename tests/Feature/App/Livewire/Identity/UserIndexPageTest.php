@@ -1,7 +1,7 @@
 <?php
 
-use Domain\Identity\Models\User;
 use App\Livewire\Identity\UserIndexPage;
+use Domain\Identity\Models\User;
 use Livewire\Livewire;
 
 use function Pest\Laravel\actingAs;

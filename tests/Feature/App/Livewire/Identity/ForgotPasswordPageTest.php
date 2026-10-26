@@ -1,9 +1,9 @@
 <?php
 
+use App\Livewire\Identity\ForgotPasswordPage;
 use Domain\Identity\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Notification;
-use App\Livewire\Identity\ForgotPasswordPage;
 use Livewire\Livewire;
 
 use function Pest\Laravel\get;

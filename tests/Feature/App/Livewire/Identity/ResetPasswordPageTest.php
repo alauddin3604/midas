@@ -1,9 +1,9 @@
 <?php
 
+use App\Livewire\Identity\ResetPasswordPage;
 use Domain\Identity\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use App\Livewire\Identity\ResetPasswordPage;
 use Livewire\Livewire;
 
 use function Pest\Laravel\get;

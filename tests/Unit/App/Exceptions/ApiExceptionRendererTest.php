@@ -19,7 +19,7 @@ function apiRequest(): Request
 }
 
 it('renders only the first message of each failing field as a 422', function (): void {
-    $translator = new Translator(new ArrayLoader(), 'en');
+    $translator = new Translator(new ArrayLoader, 'en');
     $validator = new Validator($translator, [], []);
 
     $validator->errors()->add('email', 'The email must be valid.');
@@ -66,7 +66,7 @@ it('keeps the headers of a throttled response', function (): void {
 });
 
 it('does not render for a request that does not expect JSON', function (): void {
-    $translator = new Translator(new ArrayLoader(), 'en');
+    $translator = new Translator(new ArrayLoader, 'en');
     $validator = new Validator($translator, [], []);
 
     $validator->errors()->add('email', 'The email must be valid.');
