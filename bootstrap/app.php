@@ -11,7 +11,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-$app = Application::configure(basePath: dirname(__DIR__))
+return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         health: '/up',
         then: RouteLoader::load(...),
@@ -31,7 +31,3 @@ $app = Application::configure(basePath: dirname(__DIR__))
             return app(ApiExceptionRenderer::class)->render($e, $request);
         });
     })->create();
-
-$app->useAppPath($app->basePath('src/App'));
-
-return $app;
