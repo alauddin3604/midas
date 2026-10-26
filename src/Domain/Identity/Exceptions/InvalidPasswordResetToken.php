@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Identity\Exceptions;
 
-use Support\Bases\Exceptions\UnprocessableException;
+use DomainException;
 
-final class InvalidPasswordResetToken extends UnprocessableException
+final class InvalidPasswordResetToken extends DomainException
 {
     public static function provided(): self
     {

@@ -25,11 +25,6 @@
                             <a href="{{ route('users.index') }}" wire:navigate>Users</a>
                         </li>
                     @endcan
-                    @can(\Domain\Identity\Enums\Permission::ViewAuditLog)
-                        <li @class(['uk-active' => request()->routeIs('audit.*')])>
-                            <a href="{{ route('audit.index') }}" wire:navigate>Audit log</a>
-                        </li>
-                    @endcan
                 </ul>
             </aside>
             <div class="flex min-w-0 flex-1 flex-col">

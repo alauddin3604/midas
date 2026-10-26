@@ -1,11 +1,11 @@
 <?php
 
 use App\Providers\AppServiceProvider;
-use Interfaces\Audit\Providers\AuditServiceProvider;
-use Interfaces\Identity\Providers\IdentityServiceProvider;
+use App\Providers\ExceptionServiceProvider;
+use App\Providers\IdentityServiceProvider;
 
 return [
     AppServiceProvider::class,
+    ExceptionServiceProvider::class,
     IdentityServiceProvider::class,
-    AuditServiceProvider::class,
 ];

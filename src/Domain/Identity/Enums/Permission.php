@@ -8,5 +8,4 @@ enum Permission: string
 {
     case AccessDashboard = 'dashboard.access';
     case ManageUsers = 'users.manage';
-    case ViewAuditLog = 'audit.view';
 }

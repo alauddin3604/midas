@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Domain\Identity\Exceptions;
 
-use Support\Bases\Exceptions\InternalServerErrorException;
+use DomainException;
+use Throwable;
 
-final class PasswordUpdateFailed extends InternalServerErrorException
+final class PasswordUpdateFailed extends DomainException
 {
-    public function __construct(string $message = 'Failed to update the password.', int $code = 0, ?\Throwable $previous = null)
+    public static function withMessage(string $message, Throwable $previous): self
     {
-        parent::__construct($message, $code, $previous);
+        return new self($message, 0, $previous);
     }
 }

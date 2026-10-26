@@ -79,7 +79,7 @@
             "@lint:check",
             "@types:check",
             "@rector:check",
-            "@php artisan test"
+            "@php artisan test --coverage --ansi"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

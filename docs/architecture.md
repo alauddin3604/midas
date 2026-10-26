@@ -113,7 +113,6 @@ Capabilities are `Permission` enum cases, mapped to roles in `Role::permissions(
 |---|---|---|
 | `AccessDashboard` | yes | yes |
 | `ManageUsers` | yes | no |
-| `ViewAuditLog` | yes | no |
 
 `IdentityServiceProvider` registers every permission as a Gate ability. Pass the enum itself, never
 `->value`:
@@ -129,19 +128,6 @@ $this->authorize(Permission::ManageUsers);
 
 Record-level rules go in `Domain/<Domain>/Policies` (auto-discovered); invariants stay in Actions
 as domain exceptions.
-
-## Events and the Audit domain
-
-Identity actions fire events (`UserRegistered`, `UserUpdated`, `UserDeleted`, `UserAuthenticated`,
-`UserAuthenticationFailed`, `PasswordResetLinkRequested`, `PasswordReset`).
-`Interfaces\Audit\Listeners\RecordIdentityActivity` is the only class that knows both domains: it
-translates each event into a `RecordAuditEntryPayload` and calls `RecordAuditEntryAction`.
-
-- The `Audit` domain is generic and may not use `Domain\Identity` (arch-tested).
-- `CaptureAuditContext` middleware stores IP, user agent and URL in hidden `Context`, so listeners
-  never read the request.
-- Recording never breaks the audited operation: failures are reported and swallowed.
-- Entries are append-only and pruned daily after `AUDIT_RETENTION_DAYS`.
 
 ## Routing
 

@@ -10,3 +10,5 @@ parameters:
         - database/
 
     level: 7
+
+    treatPhpDocTypesAsCertain: false

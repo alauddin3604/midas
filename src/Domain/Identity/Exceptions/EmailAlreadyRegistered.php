@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Identity\Exceptions;
 
-use Support\Bases\Exceptions\ConflictException;
+use DomainException;
 
-final class EmailAlreadyRegistered extends ConflictException
+final class EmailAlreadyRegistered extends DomainException
 {
     public static function withEmail(string $email): self
     {

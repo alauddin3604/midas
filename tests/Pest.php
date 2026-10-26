@@ -19,12 +19,7 @@ use Tests\TestCase;
 pest()
     ->extend(TestCase::class)
     ->use(RefreshDatabase::class)
-    ->in(
-        'App',
-        'Domain/*/Actions',
-        'Interfaces',
-        'Support',
-    );
+    ->in('Feature');
 
 function createUser(array $attributes = []): User
 {

@@ -31,7 +31,7 @@ final readonly class UpdateUserPasswordAction
 
             event(new PasswordUpdated($user->id));
         } catch (QueryException $e) {
-            throw new PasswordUpdateFailed('Failed to update the password due to a database error.', previous: $e);
+            throw PasswordUpdateFailed::withMessage('Failed to update the password due to a database error.', $e);
         }
     }
 }

@@ -5,20 +5,14 @@
          colors="true"
 >
     <testsuites>
-        <testsuite name="Arch">
-            <directory>tests/Arch</directory>
+        <testsuite name="Architecture">
+            <directory>tests/Architecture</directory>
         </testsuite>
-            <testsuite name="App">
-            <directory>tests/App</directory>
+            <testsuite name="Feature">
+            <directory>tests/Feature</directory>
         </testsuite>
-        <testsuite name="Domain">
-            <directory>tests/Domain</directory>
-        </testsuite>
-        <testsuite name="Interfaces">
-            <directory>tests/Interfaces</directory>
-        </testsuite>
-        <testsuite name="Support">
-            <directory>tests/Support</directory>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
         </testsuite>
     </testsuites>
     <source>

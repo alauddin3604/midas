@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Identity\Exceptions;
 
-use Support\Bases\Exceptions\ForbiddenException;
+use DomainException;
 
-final class CannotModifyOwnAccount extends ForbiddenException
+final class CannotModifyOwnAccount extends DomainException
 {
     public static function roleChange(): self
     {

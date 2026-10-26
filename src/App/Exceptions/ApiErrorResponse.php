@@ -17,7 +17,14 @@ final class ApiErrorResponse
      */
     public static function make(string $message, int $status, array $errors = [], array $headers = []): JsonResponse
     {
-        return response()->json(['message' => $message, 'errors' => $errors], $status, $headers);
+        return new JsonResponse(
+            [
+                'message' => $message,
+                'errors' => $errors,
+            ],
+            $status,
+            $headers,
+        );
     }
 
     /**
