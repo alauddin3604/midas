@@ -10,6 +10,7 @@ use App\Livewire\Identity\LoginPage;
 use App\Livewire\Identity\ResetPasswordPage;
 use App\Livewire\Identity\UserIndexPage;
 use Domain\Identity\Enums\Permission;
+use Domain\Identity\Models\User;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Support\Facades\Route;
 
@@ -22,9 +23,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth', Authorize::using(Permission::AccessDashboard)])->group(function () {
     Route::post('logout', LogoutController::class)->name('logout');
 
-    Route::middleware(Authorize::using(Permission::ManageUsers))->prefix('users')->name('users.')->group(function () {
-        Route::livewire('/', UserIndexPage::class)->name('index');
-        Route::livewire('create', CreateUserPage::class)->name('create');
-        Route::livewire('{user}/edit', EditUserPage::class)->name('edit');
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::livewire('/', UserIndexPage::class)->name('index')->can('viewAny', User::class);
+        Route::livewire('create', CreateUserPage::class)->name('create')->middleware('can:create,'.User::class);
+        Route::livewire('{user}/edit', EditUserPage::class)->name('edit')->can('update', 'user');
     });
 });
