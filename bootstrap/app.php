@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 use App\Exceptions\Domain\DomainExceptionsRegistry;
-use App\Routing\RouteLoader;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Support\Utils\ApiErrorResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,24 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         health: '/up',
-        then: RouteLoader::load(...),
+        then: function (): void {
+            $versions = glob(base_path('routes/api/*'), GLOB_ONLYDIR) ?: [];
+            sort($versions);
+
+            foreach ($versions as $dir) {
+                $version = basename($dir);
+
+                $files = glob("{$dir}/*.php") ?: [];
+                sort($files);
+
+                foreach ($files as $file) {
+                    Route::middleware('api')
+                        ->prefix("api/{$version}")
+                        ->name("api.{$version}.")
+                        ->group($file);
+                }
+            }
+        },
     )
     ->withCommands([
         __DIR__.'/../src/App/Console/Commands',
