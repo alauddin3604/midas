@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\V1\Controllers\Identity;
+namespace App\Http\V1\Controllers\Identity;
 
-use App\Http\Api\V1\Controllers\ApiController;
-use App\Http\Api\V1\Requests\Identity\RegisterRequest;
-use App\Http\Api\V1\Resources\Identity\UserResource;
+use App\Http\V1\Controllers\ApiController;
+use App\Http\V1\Requests\Identity\RegisterRequest;
+use App\Http\V1\Resources\Identity\UserResource;
 use Domain\Identity\Actions\RegisterUserAction;
 use Illuminate\Http\JsonResponse;
 

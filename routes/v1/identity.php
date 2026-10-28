@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Http\Api\V1\Controllers\Identity\LoginController;
-use App\Http\Api\V1\Controllers\Identity\LogoutController;
-use App\Http\Api\V1\Controllers\Identity\RegisterController;
-use App\Http\Api\V1\Controllers\Identity\UpdatePasswordController;
+use App\Http\V1\Controllers\Identity\LoginController;
+use App\Http\V1\Controllers\Identity\LogoutController;
+use App\Http\V1\Controllers\Identity\RegisterController;
+use App\Http\V1\Controllers\Identity\UpdatePasswordController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('register', RegisterController::class)

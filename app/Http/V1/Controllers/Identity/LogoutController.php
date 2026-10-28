@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\V1\Controllers\Identity;
+namespace App\Http\V1\Controllers\Identity;
 
-use App\Http\Api\V1\Controllers\ApiController;
+use App\Http\V1\Controllers\ApiController;
 use Domain\Identity\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

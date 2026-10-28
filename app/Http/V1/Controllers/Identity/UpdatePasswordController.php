@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\V1\Controllers\Identity;
+namespace App\Http\V1\Controllers\Identity;
 
-use App\Http\Api\V1\Controllers\ApiController;
-use App\Http\Api\V1\Requests\Identity\UpdateUserPasswordRequest;
+use App\Http\V1\Controllers\ApiController;
+use App\Http\V1\Requests\Identity\UpdateUserPasswordRequest;
 use Domain\Identity\Actions\UpdateUserPasswordAction;
 use Illuminate\Http\Response;
 

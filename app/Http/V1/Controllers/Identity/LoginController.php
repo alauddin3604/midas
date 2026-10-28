@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\V1\Controllers\Identity;
+namespace App\Http\V1\Controllers\Identity;
 
-use App\Http\Api\V1\Controllers\ApiController;
-use App\Http\Api\V1\Requests\Identity\LoginRequest;
+use App\Http\V1\Controllers\ApiController;
+use App\Http\V1\Requests\Identity\LoginRequest;
 use Domain\Identity\Actions\AuthenticateUserAction;
 use Domain\Identity\Exceptions\InvalidCredentials;
 use Illuminate\Http\JsonResponse;

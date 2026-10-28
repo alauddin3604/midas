@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Api\V1\Resources\Identity;
+namespace App\Http\V1\Resources\Identity;
 
 use Domain\Identity\Models\User;
 use Illuminate\Http\Request;
