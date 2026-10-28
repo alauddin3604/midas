@@ -7,7 +7,7 @@ use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\postJson;
 
 it('registers a member', function (): void {
-    postJson('/api/v1/register', [
+    postJson(route('api.v1.register'), [
         'name' => 'Jane Doe',
         'email' => 'jane@example.com',
         'password' => 'secret-password',
@@ -21,7 +21,7 @@ it('registers a member', function (): void {
 });
 
 it('ignores a role sent by the client', function (): void {
-    postJson('/api/v1/register', [
+    postJson(route('api.v1.register'), [
         'name' => 'Jane Doe',
         'email' => 'jane@example.com',
         'password' => 'secret-password',
@@ -34,7 +34,7 @@ it('ignores a role sent by the client', function (): void {
 it('answers 409 for an email that is already registered', function (): void {
     User::factory()->create(['email' => 'jane@example.com']);
 
-    postJson('/api/v1/register', [
+    postJson(route('api.v1.register'), [
         'name' => 'Jane Doe',
         'email' => 'jane@example.com',
         'password' => 'secret-password',
@@ -46,7 +46,7 @@ it('answers 409 for an email that is already registered', function (): void {
 });
 
 it('validates the payload', function (): void {
-    postJson('/api/v1/register', [])
+    postJson(route('api.v1.register'), [])
         ->assertUnprocessable()
         ->assertJsonPath('errors.*.field', ['name', 'email', 'password']);
 });

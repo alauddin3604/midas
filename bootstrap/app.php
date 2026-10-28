@@ -18,25 +18,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
+        api: __DIR__.'/../routes/api.php',
+        apiPrefix: '',
         health: '/up',
-        then: function (): void {
-            $versions = glob(base_path('routes/api/*'), GLOB_ONLYDIR) ?: [];
-            sort($versions);
-
-            foreach ($versions as $dir) {
-                $version = basename($dir);
-
-                $files = glob("{$dir}/*.php") ?: [];
-                sort($files);
-
-                foreach ($files as $file) {
-                    Route::middleware('api')
-                        ->prefix("api/{$version}")
-                        ->name("api.{$version}.")
-                        ->group($file);
-                }
-            }
-        },
     )
     ->withCommands([
         __DIR__.'/../src/App/Console/Commands',
