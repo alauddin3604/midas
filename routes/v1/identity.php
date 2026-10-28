@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\V1\Controllers\Identity\ListUsersController;
 use App\Http\V1\Controllers\Identity\LoginController;
 use App\Http\V1\Controllers\Identity\LogoutController;
 use App\Http\V1\Controllers\Identity\RegisterController;
@@ -23,3 +24,11 @@ Route::post('logout', LogoutController::class)
 Route::put('password', UpdatePasswordController::class)
     ->middleware('auth:sanctum')
     ->name('password.update');
+
+Route::prefix('users')
+    ->name('users.')
+    ->middleware('auth:sanctum')
+    ->group(function (): void {
+        Route::get('/', ListUsersController::class)
+            ->name('index');
+    });
