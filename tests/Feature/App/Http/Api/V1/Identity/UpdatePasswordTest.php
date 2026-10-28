@@ -6,7 +6,7 @@ use Laravel\Sanctum\Sanctum;
 use function Pest\Laravel\putJson;
 
 it('cannot update the password if user is not authenticated', function (): void {
-    $response = putJson(route('api.v1.password.update'), [
+    $response = putJson(route('v1.password.update'), [
         'password' => 'NewPassword123!',
     ]);
 
@@ -16,7 +16,7 @@ it('cannot update the password if user is not authenticated', function (): void 
 it('rejects invalid passwords', function (mixed $password, mixed $confirmation, string $error): void {
     Sanctum::actingAs(createUser());
 
-    putJson(route('api.v1.password.update'), ['password' => $password, 'password_confirmation' => $confirmation])
+    putJson(route('v1.password.update'), ['password' => $password, 'password_confirmation' => $confirmation])
         ->assertUnprocessable()
         ->assertJson([
             'message' => 'Validation failed.',
@@ -38,7 +38,7 @@ it('can update the password', function (): void {
 
     Sanctum::actingAs($user);
 
-    $response = putJson(route('api.v1.password.update'), [
+    $response = putJson(route('v1.password.update'), [
         'password' => 'NewPassword123!',
         'password_confirmation' => 'NewPassword123!',
     ]);

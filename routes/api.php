@@ -15,7 +15,7 @@ foreach ($versions as $dir) {
 
     foreach ($files as $file) {
         Route::prefix($version)
-            ->name("api.{$version}.")
+            ->name("{$version}.")
             ->group($file);
     }
 }
