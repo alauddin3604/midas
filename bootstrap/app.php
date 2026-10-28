@@ -9,7 +9,6 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Support\Utils\ApiErrorResponse;
 use Symfony\Component\HttpFoundation\Response;
