@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Exceptions\ApiErrorResponse;
 use App\Exceptions\Domain\DomainExceptionsRegistry;
 use App\Routing\RouteLoader;
 use Illuminate\Auth\AuthenticationException;
@@ -12,6 +11,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Support\Utils\ApiErrorResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
