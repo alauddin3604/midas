@@ -5,6 +5,8 @@ use Domain\Identity\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+require_once __DIR__.'/Helpers/ticketing.php';
+
 /*
 |--------------------------------------------------------------------------
 | Test Case

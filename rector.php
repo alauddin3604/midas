@@ -22,5 +22,5 @@ return RectorConfig::configure()
     ->withSets([
         LaravelSetList::LARAVEL_COLLECTION,
         LaravelSetList::LARAVEL_ELOQUENT_MAGIC_METHOD_TO_QUERY_BUILDER,
-        LaravelSetList::LARAVEL_FACTORIES,
+        // LaravelSetList::LARAVEL_FACTORIES,
     ]);
