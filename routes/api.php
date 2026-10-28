@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
 
-$versions = glob(__DIR__.'/api/*', GLOB_ONLYDIR) ?: [];
+$versions = glob(__DIR__.'/*', GLOB_ONLYDIR) ?: [];
 sort($versions);
 
 foreach ($versions as $dir) {
