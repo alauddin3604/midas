@@ -16,7 +16,7 @@ enum Role: string
     {
         return match ($this) {
             self::Admin => Permission::cases(),
-            self::Member => [Permission::AccessDashboard],
+            self::Member => [],
         };
     }
 

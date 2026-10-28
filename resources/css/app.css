@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import 'franken-ui/css/franken-ui.css';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';

@@ -1,5 +1,4 @@
 import tailwindcss from '@tailwindcss/vite';
-import frankenUi from 'franken-ui/plugin-vite';
 import laravel from 'laravel-vite-plugin';
 import { bunny } from 'laravel-vite-plugin/fonts';
 import { defineConfig, lazyPlugins } from 'vite-plus';
@@ -14,11 +13,6 @@ const https =
 
 export default defineConfig({
     plugins: lazyPlugins(() => [
-        frankenUi({
-            preflight: false,
-            layer: true,
-            layerExceptions: ['chart'],
-        }),
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,

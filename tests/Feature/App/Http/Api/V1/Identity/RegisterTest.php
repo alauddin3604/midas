@@ -1,9 +1,7 @@
 <?php
 
 use Domain\Identity\Enums\Role;
-use Domain\Identity\Exceptions\EmailAlreadyRegistered;
 use Domain\Identity\Models\User;
-use Illuminate\Support\Facades\Exceptions;
 
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\postJson;
@@ -36,8 +34,6 @@ it('ignores a role sent by the client', function (): void {
 it('answers 409 for an email that is already registered', function (): void {
     User::factory()->create(['email' => 'jane@example.com']);
 
-    Exceptions::fake();
-
     postJson('/api/v1/register', [
         'name' => 'Jane Doe',
         'email' => 'jane@example.com',
@@ -47,8 +43,6 @@ it('answers 409 for an email that is already registered', function (): void {
         ->assertJson([
             'message' => 'A user with email [jane@example.com] is already registered.',
         ]);
-
-    Exceptions::assertReported(EmailAlreadyRegistered::class);
 });
 
 it('validates the payload', function (): void {

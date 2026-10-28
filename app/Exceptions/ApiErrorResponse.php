@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Exceptions;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 final class ApiErrorResponse
 {
@@ -25,13 +24,5 @@ final class ApiErrorResponse
             $status,
             $headers,
         );
-    }
-
-    /**
-     * Determine whether the caller should receive a JSON error instead of a redirect or HTML page.
-     */
-    public static function isExpectedBy(Request $request): bool
-    {
-        return $request->is('api/*') || $request->expectsJson();
     }
 }

@@ -10,15 +10,11 @@ src/
 │   └── <Domain>/
 │       ├── Console/               ← Console commands go here
 │       ├── Http/
-│       │   ├── Api/
-│       │   │   └── V1/
-│       │   │       ├── Controllers/
-│       │   │       ├── Requests/
-│       │   │       └── Resources/
-│       │   └── Dashboard/
-│       │       ├── Controllers/
-│       │       ├── Livewire/
-│       │       └── ViewModels/    ← To place class that prepares all the data a specific view needs
+│       │   └── Api/
+│       │       └── V1/
+│       │           ├── Controllers/
+│       │           ├── Requests/
+│       │           └── Resources/
 │       ├── Jobs/
 │       ├── Listeners/
 │       └── Providers/             ← <Domain>ServiceProvider: Gate abilities, exception map

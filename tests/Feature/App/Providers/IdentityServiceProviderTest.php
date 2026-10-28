@@ -9,8 +9,7 @@ it('exposes domain permissions as gate abilities', function () {
     $member = User::factory()->create();
 
     expect(Gate::forUser($admin)->allows(Permission::ManageUsers))->toBeTrue()
-        ->and(Gate::forUser($member)->allows(Permission::ManageUsers))->toBeFalse()
-        ->and(Gate::forUser($member)->allows(Permission::AccessDashboard))->toBeTrue();
+        ->and(Gate::forUser($member)->allows(Permission::ManageUsers))->toBeFalse();
 });
 
 it('defines a gate for every permission', function () {

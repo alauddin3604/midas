@@ -13,10 +13,6 @@ final class RouteLoader
      */
     public static function load(): void
     {
-        foreach (self::files('dashboard') as $file) {
-            Route::middleware('web')->group($file);
-        }
-
         foreach (glob(base_path('routes/api/*'), GLOB_ONLYDIR) ?: [] as $dir) {
             $version = basename($dir);
 
