@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Domain\Identity\Enums;
 
+use function in_array;
+
 enum Role: string
 {
     case Admin = 'admin';

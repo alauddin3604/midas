@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Domain\Ticketing\Enums;
 
+use function in_array;
+
 enum TicketStatus: string
 {
     case New = 'new';

@@ -8,6 +8,8 @@ use DateTimeInterface;
 use InvalidArgumentException;
 use Stringable;
 
+use function sprintf;
+
 final readonly class TicketNumber implements Stringable
 {
     private const string PREFIX = 'TIC';

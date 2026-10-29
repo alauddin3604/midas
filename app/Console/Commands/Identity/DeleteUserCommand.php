@@ -11,6 +11,8 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Validator;
 
+use function is_string;
+
 #[Signature('identity:delete-user {email}')]
 #[Description('Delete a user from an email')]
 final class DeleteUserCommand extends Command

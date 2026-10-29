@@ -9,6 +9,8 @@ use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
+use function is_string;
+
 /** @implements CastsAttributes<TicketNumber, TicketNumber|string> */
 final class TicketNumberCast implements CastsAttributes
 {
