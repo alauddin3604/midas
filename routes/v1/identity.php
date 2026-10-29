@@ -13,23 +13,22 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('register', RegisterController::class)
     ->middleware('throttle:5,1')
+    ->withoutMiddleware('auth:sanctum')
     ->name('register');
 
 Route::post('login', LoginController::class)
     ->middleware('throttle:5,1')
+    ->withoutMiddleware('auth:sanctum')
     ->name('login');
 
 Route::post('logout', LogoutController::class)
-    ->middleware('auth:sanctum')
     ->name('logout');
 
 Route::put('password', UpdatePasswordController::class)
-    ->middleware('auth:sanctum')
     ->name('password.update');
 
 Route::prefix('users')
     ->name('users.')
-    ->middleware('auth:sanctum')
     ->group(function (): void {
         Route::get('/', ListUsersController::class)
             ->name('index');

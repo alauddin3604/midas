@@ -15,6 +15,7 @@ foreach ($versions as $dir) {
 
     foreach ($files as $file) {
         Route::prefix($version)
+            ->middleware('auth:sanctum')
             ->name("{$version}.")
             ->group($file);
     }

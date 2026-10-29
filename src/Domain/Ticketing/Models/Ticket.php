@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Date;
 
 /**
+ * @property string $id
  * @property TicketNumber $number
  * @property string $subject
  * @property string $description
