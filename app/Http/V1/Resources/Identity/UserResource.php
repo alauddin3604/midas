@@ -22,7 +22,7 @@ final class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'role' => $this->role->value,
+            'role' => $this->role->label(),
             'email_verified' => $this->email_verified_at !== null,
         ];
     }

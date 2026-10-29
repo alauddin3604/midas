@@ -55,4 +55,3 @@ it('dispatch an event after updating a user', function (): void {
 
     Event::assertDispatched(UserUpdated::class);
 });
-

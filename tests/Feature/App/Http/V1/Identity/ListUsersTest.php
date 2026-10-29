@@ -44,7 +44,7 @@ it('can list users', function (): void {
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'role' => 'admin',
+                'role' => 'Admin',
             ],
         ],
     ]);

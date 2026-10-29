@@ -14,7 +14,7 @@ it('registers a member', function (): void {
     ])
         ->assertCreated()
         ->assertJsonPath('data.email', 'jane@example.com')
-        ->assertJsonPath('data.role', 'member')
+        ->assertJsonPath('data.role', 'Member')
         ->assertJsonMissingPath('data.password');
 
     assertDatabaseHas('users', ['email' => 'jane@example.com']);
