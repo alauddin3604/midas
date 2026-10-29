@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\V1\Controllers\Identity\CreateUserController;
 use App\Http\V1\Controllers\Identity\ListUsersController;
 use App\Http\V1\Controllers\Identity\LoginController;
 use App\Http\V1\Controllers\Identity\LogoutController;
@@ -32,6 +33,9 @@ Route::prefix('users')
     ->group(function (): void {
         Route::get('/', ListUsersController::class)
             ->name('index');
+
+        Route::post('/', CreateUserController::class)
+            ->name('store');
 
         Route::put('{user}', UpdateUserController::class)
             ->name('update');
