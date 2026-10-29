@@ -15,7 +15,6 @@ use Domain\Ticketing\ValueObjects\TicketNumber;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Date;
 
 /**
  * @property string $id
@@ -87,8 +86,8 @@ final class Ticket extends Model
         $this->status = $to;
 
         match (true) {
-            $to->hasResolved() => $this->resolved_at = Date::now(),
-            $to === TicketStatus::Closed => $this->closed_at = Date::now(),
+            $to->hasResolved() => $this->resolved_at = now()->toImmutable(),
+            $to === TicketStatus::Closed => $this->closed_at = now()->toImmutable(),
             $from->hasResolved() && $to === TicketStatus::InProgress => $this->resolved_at = null,
             default => null,
         };
