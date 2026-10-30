@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\Exceptions\Domain\DomainExceptionsRegistry;
 use App\Exceptions\Domain\IdentityExceptionsMapper;
+use App\Exceptions\Domain\TicketingExceptionsMapper;
 use Illuminate\Support\ServiceProvider;
 
 class ExceptionServiceProvider extends ServiceProvider
@@ -19,6 +20,7 @@ class ExceptionServiceProvider extends ServiceProvider
     {
         $this->app->tag([
             IdentityExceptionsMapper::class,
+            TicketingExceptionsMapper::class,
         ], self::TAG);
 
         $this->app->when(DomainExceptionsRegistry::class)
