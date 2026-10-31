@@ -59,13 +59,4 @@ class User extends Authenticatable
             'role' => Role::class,
         ];
     }
-
-    /**
-     * Update the user's password and set the password changed timestamp.
-     */
-    public function updatePassword(string $password): void
-    {
-        $this->password = $password;
-        $this->password_changed_at = Carbon::now();
-    }
 }

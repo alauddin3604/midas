@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Ticketing\Actions;
 
+use Domain\Ticketing\Enums\TicketStatus;
 use Domain\Ticketing\Events\TicketAssigned;
+use Domain\Ticketing\Exceptions\TicketAlreadyClosed;
 use Domain\Ticketing\Models\Ticket;
 use Domain\Ticketing\Payloads\AssignTicketPayload;
 use Domain\Ticketing\Payloads\CreateTicketStatusHistoryPayload;
@@ -16,6 +18,9 @@ final readonly class AssignTicketAction
         private CreateTicketStatusHistoryAction $createStatusHistory,
     ) {}
 
+    /**
+     * Assign a ticket, advancing new tickets to assigned.
+     */
     public function execute(AssignTicketPayload $payload): Ticket
     {
         return DB::transaction(function () use ($payload): Ticket {
@@ -23,15 +28,26 @@ final readonly class AssignTicketAction
             $from = $ticket->status;
             $previousAssigneeId = $ticket->assignee_id;
 
-            $ticket->assignTo($payload->assigneeId);
+            if ($ticket->status->isTerminal()) {
+                throw TicketAlreadyClosed::create();
+            }
+
+            $ticket->assignee_id = $payload->assigneeId;
+
+            if ($ticket->status === TicketStatus::New) {
+                $to = TicketStatus::Assigned;
+                $ticket->status->assertCanTransitionTo($to);
+                $ticket->status = $to;
+            }
+
             $ticket->save();
 
             if ($ticket->status !== $from) {
                 $this->createStatusHistory->execute(new CreateTicketStatusHistoryPayload(
-                    $ticket->id,
-                    $from,
-                    $ticket->status,
-                    $payload->actorId,
+                    ticketId: $ticket->id,
+                    fromStatus: $from,
+                    toStatus: $ticket->status,
+                    changedBy: $payload->actorId,
                 ));
             }
 

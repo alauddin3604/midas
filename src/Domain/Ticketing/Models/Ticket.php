@@ -8,9 +8,6 @@ use Carbon\CarbonImmutable;
 use Domain\Ticketing\Casts\TicketNumberCast;
 use Domain\Ticketing\Enums\TicketPriority;
 use Domain\Ticketing\Enums\TicketStatus;
-use Domain\Ticketing\Exceptions\InvalidStatusTransition;
-use Domain\Ticketing\Exceptions\TicketAlreadyClosed;
-use Domain\Ticketing\Exceptions\TicketNotAssigned;
 use Domain\Ticketing\ValueObjects\TicketNumber;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
@@ -51,45 +48,5 @@ final class Ticket extends Model
     public function statusHistories(): HasMany
     {
         return $this->hasMany(TicketStatusHistory::class);
-    }
-
-    /**
-     * Assign the ticket to a user.
-     */
-    public function assignTo(string $assigneeId): void
-    {
-        if ($this->status->isTerminal()) {
-            throw TicketAlreadyClosed::create();
-        }
-
-        $this->assignee_id = $assigneeId;
-
-        if ($this->status === TicketStatus::New) {
-            $this->changeStatus(TicketStatus::Assigned);
-        }
-    }
-
-    /**
-     * Change the ticket status.
-     */
-    public function changeStatus(TicketStatus $to): void
-    {
-        if (! $this->status->canTransitionTo($to)) {
-            throw InvalidStatusTransition::between($this->status, $to);
-        }
-
-        if ($to->requiresAssignee() && $this->assignee_id === null) {
-            throw TicketNotAssigned::forStatus($to);
-        }
-
-        $from = $this->status;
-        $this->status = $to;
-
-        match (true) {
-            $to->hasResolved() => $this->resolved_at = now()->toImmutable(),
-            $to === TicketStatus::Closed => $this->closed_at = now()->toImmutable(),
-            $from->hasResolved() && $to === TicketStatus::InProgress => $this->resolved_at = null,
-            default => null,
-        };
     }
 }

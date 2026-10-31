@@ -9,6 +9,7 @@ use Domain\Identity\Exceptions\PasswordUpdateFailed;
 use Domain\Identity\Models\User;
 use Domain\Identity\Payloads\UpdateUserPasswordPayload;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 final readonly class UpdateUserPasswordAction
@@ -25,7 +26,8 @@ final readonly class UpdateUserPasswordAction
     {
         try {
             DB::transaction(function () use ($user, $data): void {
-                $user->updatePassword($data->password->value);
+                $user->password = $data->password->value;
+                $user->password_changed_at = Carbon::now();
                 $user->save();
             });
 
