@@ -10,11 +10,10 @@ src/
 │   └── <Domain>/
 │       ├── Console/               ← Console commands go here
 │       ├── Http/
-│       │   └── Api/
-│       │       └── V1/
-│       │           ├── Controllers/
-│       │           ├── Requests/
-│       │           └── Resources/
+│       │   └── V1/
+│       │       ├── Controllers/
+│       │       ├── Requests/
+│       │       └── Resources/
 │       ├── Jobs/
 │       ├── Listeners/
 │       └── Providers/             ← <Domain>ServiceProvider: Gate abilities, exception map

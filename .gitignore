@@ -26,6 +26,8 @@ yarn-error.log
 /.amp
 /.factory
 /.grok
+/.claude
+/.cursor
 /.junie
 /.kiro
 /.pi
