@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Domain\Ticketing\Enums;
 
-use Domain\Ticketing\Exceptions\InvalidStatusTransition;
-
 use function in_array;
 
 enum TicketStatus: string
@@ -33,18 +31,6 @@ enum TicketStatus: string
     public function canTransitionTo(self $to): bool
     {
         return in_array($to, $this->allowedTransitions(), true);
-    }
-
-    /**
-     * Ensure the requested status transition is allowed.
-     *
-     * @throws InvalidStatusTransition
-     */
-    public function assertCanTransitionTo(self $to): void
-    {
-        if (! $this->canTransitionTo($to)) {
-            throw InvalidStatusTransition::between($this, $to);
-        }
     }
 
     public function requiresAssignee(): bool

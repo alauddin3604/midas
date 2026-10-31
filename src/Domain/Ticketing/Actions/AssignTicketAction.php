@@ -10,11 +10,13 @@ use Domain\Ticketing\Exceptions\TicketAlreadyClosed;
 use Domain\Ticketing\Models\Ticket;
 use Domain\Ticketing\Payloads\AssignTicketPayload;
 use Domain\Ticketing\Payloads\CreateTicketStatusHistoryPayload;
+use Domain\Ticketing\Tasks\ChangeTicketStatusTask;
 use Illuminate\Support\Facades\DB;
 
 final readonly class AssignTicketAction
 {
     public function __construct(
+        private ChangeTicketStatusTask $changeTicketStatus,
         private CreateTicketStatusHistoryAction $createStatusHistory,
     ) {}
 
@@ -36,8 +38,7 @@ final readonly class AssignTicketAction
 
             if ($ticket->status === TicketStatus::New) {
                 $to = TicketStatus::Assigned;
-                $ticket->status->assertCanTransitionTo($to);
-                $ticket->status = $to;
+                $this->changeTicketStatus->execute($ticket, $to);
             }
 
             $ticket->save();

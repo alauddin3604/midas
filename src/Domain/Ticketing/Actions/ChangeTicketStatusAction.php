@@ -10,11 +10,13 @@ use Domain\Ticketing\Exceptions\TicketNotAssigned;
 use Domain\Ticketing\Models\Ticket;
 use Domain\Ticketing\Payloads\ChangeTicketStatusPayload;
 use Domain\Ticketing\Payloads\CreateTicketStatusHistoryPayload;
+use Domain\Ticketing\Tasks\ChangeTicketStatusTask;
 use Illuminate\Support\Facades\DB;
 
 final readonly class ChangeTicketStatusAction
 {
     public function __construct(
+        private ChangeTicketStatusTask $changeTicketStatus,
         private CreateTicketStatusHistoryAction $createStatusHistory,
     ) {}
 
@@ -27,7 +29,7 @@ final readonly class ChangeTicketStatusAction
             $ticket = Ticket::query()->lockForUpdate()->findOrFail($payload->ticketId);
             $from = $ticket->status;
 
-            $this->changeStatus($ticket, $payload->to);
+            $this->changeStatus($ticket, $from, $payload->to);
             $ticket->save();
 
             $this->createStatusHistory->execute(new CreateTicketStatusHistoryPayload(
@@ -54,16 +56,13 @@ final readonly class ChangeTicketStatusAction
     /**
      * Validate the requested transition and update status-related timestamps.
      */
-    private function changeStatus(Ticket $ticket, TicketStatus $to): void
+    private function changeStatus(Ticket $ticket, TicketStatus $from, TicketStatus $to): void
     {
-        $ticket->status->assertCanTransitionTo($to);
-
         if ($to->requiresAssignee() && $ticket->assignee_id === null) {
             throw TicketNotAssigned::forStatus($to);
         }
 
-        $from = $ticket->status;
-        $ticket->status = $to;
+        $this->changeTicketStatus->execute($ticket, $to);
 
         match (true) {
             $to->hasResolved() => $ticket->resolved_at = now()->toImmutable(),
