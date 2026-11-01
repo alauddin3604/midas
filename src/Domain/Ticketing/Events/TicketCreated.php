@@ -7,9 +7,9 @@ namespace Domain\Ticketing\Events;
 use DateTimeImmutable;
 use Domain\Ticketing\Enums\TicketPriority;
 use Domain\Ticketing\Models\Ticket;
-use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
+use Support\Bases\Events\DomainEvent;
 
-final readonly class TicketCreated implements ShouldDispatchAfterCommit
+final readonly class TicketCreated extends DomainEvent
 {
     public function __construct(
         public string $ticketId,

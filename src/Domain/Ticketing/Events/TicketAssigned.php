@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Domain\Ticketing\Events;
 
 use DateTimeImmutable;
-use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
+use Support\Bases\Events\DomainEvent;
 
-final readonly class TicketAssigned implements ShouldDispatchAfterCommit
+final readonly class TicketAssigned extends DomainEvent
 {
     public function __construct(
         public string $ticketId,

@@ -6,9 +6,9 @@ namespace Domain\Ticketing\Events;
 
 use DateTimeImmutable;
 use Domain\Ticketing\Enums\TicketStatus;
-use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
+use Support\Bases\Events\DomainEvent;
 
-final class TicketStatusChanged implements ShouldDispatchAfterCommit
+final readonly class TicketStatusChanged extends DomainEvent
 {
     public function __construct(
         public string $ticketId,

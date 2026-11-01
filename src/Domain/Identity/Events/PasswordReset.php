@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Identity\Events;
 
-use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
+use Support\Bases\Events\DomainEvent;
 
-final readonly class PasswordReset implements ShouldDispatchAfterCommit
+final readonly class PasswordReset extends DomainEvent
 {
     public function __construct(
         public string $userId,
