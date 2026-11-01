@@ -24,10 +24,10 @@ final readonly class CreateTicketAction
             $ticket = $this->createTicket($payload);
 
             $this->createStatusHistory->execute(new CreateTicketStatusHistoryPayload(
-                $ticket->id,
-                null,
-                TicketStatus::New,
-                $ticket->requester_id,
+                ticketId: $ticket->id,
+                fromStatus: null,
+                toStatus: TicketStatus::New,
+                changedBy: $ticket->requester_id,
             ));
 
             event(TicketCreated::fromTicket($ticket));
