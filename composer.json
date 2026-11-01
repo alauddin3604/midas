@@ -12,8 +12,7 @@
         "php": "^8.4",
         "laravel/framework": "^13.17",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^3.0",
-        "livewire/blaze": "^1.0"
+        "laravel/tinker": "^3.0"
     },
     "require-dev": {
         "driftingly/rector-laravel": "^2.6",
