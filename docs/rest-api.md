@@ -1,9 +1,9 @@
 # REST API
 
-The API is versioned under `/api/v1` and every response is JSON. Successful responses are built
+The API is versioned under `/v1` and every response is JSON. Successful responses are built
 with Laravel API Resources (`JsonResource`); errors share one envelope.
 
-Send `Accept: application/json` on every request. Errors on `api/*` paths are always rendered as
+Send `Accept: application/json` on every request. Errors on `v1/*` paths are always rendered as
 JSON; elsewhere only when the request expects JSON.
 
 ## Success responses

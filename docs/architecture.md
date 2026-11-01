@@ -1,83 +1,91 @@
 # Architecture
 
-Midas separates **what the business does** (Domain) from **how it is delivered** (Interfaces). The split
-is enforced by architecture tests in `tests/Arch`, so a violation fails the suite.
+Midas is an API-only backend for the IT department's ticketing system, consumed by a separate SPA. It
+separates **what the business does** (Domain) from **how it is delivered** (App). The split is enforced
+by architecture tests in `tests/Arch`, so a violation fails the suite.
 
 ## Layers
 
 Dependencies point one way only:
 
-    App → Interfaces → Domain → Support
+    App → Domain → Support
 
-(`App` may use anything; `Interfaces` may use `Domain` and `Support`; `Domain` may use `Support`;
-`Support` uses nothing of ours.)
+(`App` may use anything; `Domain` may use `Support`; `Support` uses nothing of ours.)
 
 | Layer | Namespace | Responsibility |
 |---|---|---|
-| App | `App\` | Wiring only: bootstrap, service providers, route and command discovery, exception-to-response handlers, schedule. |
-| Interfaces | `Interfaces\<Domain>\` | Delivery: HTTP (routes, controllers, requests, resources, middleware), Livewire, ViewModels, console, listeners, jobs, per-domain providers (e.g. Gate abilities). Turns input into Payloads, calls one Action, formats output. |
-| Domain | `Domain\<Domain>\` | Business rules and data. Knows nothing about HTTP, Livewire, queues or the console. |
+| App | `App\` | Wiring and delivery. Wiring: bootstrap, service providers, route loading, exception-to-response handling, adapters between domains. Delivery: HTTP (controllers, requests, resources, middleware), console commands, listeners, jobs. Turns input into Payloads, calls one Action, formats output. |
+| Domain | `Domain\<Domain>\` | Business rules and data. Knows nothing about HTTP, sessions, queues or the console. |
 | Support | `Support\` | Infrastructure with no business meaning: base classes, providers, utils. |
 
-### Rules:
+### Rules
 
 **Domain**
 - May use Eloquent, `Illuminate\Support` and Support classes.
-- Never imports `App`, `Interfaces`, Livewire, `Illuminate\Http`, `Illuminate\Routing`, `Illuminate\Console` or the `Auth`/`Request` facades.
+- Never imports `App`, `Illuminate\Http`, `Illuminate\Routing`, `Illuminate\Console` or the `Auth`/`Request` facades.
 - Never dispatches jobs or touches listeners. Actions only fire Events.
-- Exceptions extend a category from `Support\Bases\Exceptions` and never carry HTTP status codes.
+- Exceptions extend a category from `Support\Bases\Exceptions` (which must ultimately extend
+  `DomainException`, the type the HTTP handler renders) and never carry HTTP status codes.
 
-**Interfaces**
-- Never imports `App`.
-- Controllers, Livewire components, commands, listeners and jobs contain no business rules; they call one Action.
-- One domain's Interfaces never import another's, except `Midas`, which nothing may import.
+**App**
+- Controllers, commands, listeners and jobs contain no business rules; they call one Action.
+- Session and auth mechanics (login, logout) live in controllers. Actions never touch the session.
+- Controllers decide which relations to eager-load for a response. Actions don't shape data for one
+  particular response.
 
 **Support**
-- Never imports `Domain`, `Interfaces` or `App`.
-- `Bases/` holds classes to extend; `Http/` holds helpers to use or compose.
+- Never imports `Domain` or `App`.
+- `Bases/` holds classes to extend.
 
 **Cross-domain**
-- A domain may use another domain's Actions, Payloads, Enums and ValueObjects, but never its Models (other than holding an ID).
-- Cross-domain side effects go through Events. The reacting domain handles them in a Listener under its own `Interfaces/<Domain>/Listeners/`, which calls an Action.
+- Reference other domains by ID only (`requester_id`, `assignee_id`). No Eloquent relations to another
+  domain's Models.
+- A domain may use another domain's Actions, Payloads, Enums and ValueObjects.
+- For lookups and capabilities ("may this user assign tickets?"), the consuming domain declares a
+  **contract** in its own `Contracts/`. An adapter in `app/Adapters/<Domain>/` implements it using the
+  other domain, and a service provider binds it. Neither domain imports the other.
+- Cross-domain side effects go through Events. The reacting domain handles them in a Listener under App,
+  which calls an Action.
 
 ### Where things go
 
 | Thing | Location |
 |---|---|
-| Global middleware | `Interfaces/Midas/Http/Middleware/` |
-| Surface-specific middleware | `Interfaces/<Domain>/Http/<Surface>/Middleware/` |
-| Route files | `Interfaces/<Domain>/Http/<Surface>/Routes/` |
-| Domain exception → HTTP status map | `App/Exceptions/` |
-
-### Midas
-
-`Interfaces/Midas` is the application shell (home page, layout, global middleware). It has no matching `Domain/Midas`. Business auth (login, reset) belongs to `Identity`, not `Midas`.
+| HTTP, versioned | `app/Http/V1/{Controllers,Requests,Resources}/<Domain>/` |
+| Route files | `routes/api/v1/<domain>.php` |
+| Global middleware | `app/Middleware/` |
+| Domain exception → HTTP status map | `app/Exceptions/Domain/` |
+| Cross-domain adapters | `app/Adapters/<Domain>/` |
+| Policies, contracts, casts | `src/Domain/<Domain>/{Policies,Contracts,Casts}/` |
 
 ## Building blocks
 
 | Block | Location | Shape |
 |---|---|---|
-| Action | `Domain/<D>/Actions` | `final readonly`, suffix `Action`, one public `execute()`. The only public write API of a domain. |
-| Payload | `Domain/<D>/Payloads` | `final readonly` typed DTO, suffix `Payload`. |
-| Model | `Domain/<D>/Models` | Data access, relations, casts. No business operations. |
+| Action | `Domain/<D>/Actions` | `final readonly`, suffix `Action`, one public `execute()`. The only public write API of a domain. Owns the transaction (nested Actions join it), locks rows it read-modify-writes with `lockForUpdate()`, and fires Events. |
+| Payload | `Domain/<D>/Payloads` | `final readonly` typed DTO, suffix `Payload`. Includes the acting user's id (`actorId`) when the operation needs one. |
+| Model | `Domain/<D>/Models` | Data access, relations, casts, and guards for its own invariants (`Ticket::changeStatus()`, `Ticket::assignTo()`): pure state changes that throw domain exceptions. No persistence, transactions, events or orchestration across models; that is the Action's job. |
 | Query builder | `Domain/<D>/QueryBuilders` | `final`, `<Model>QueryBuilder`; every scope lives here, attached with `#[UseEloquentBuilder]`. |
-| Event | `Domain/<D>/Events` | `final readonly`, extends `DomainEvent` (dispatched after commit). Fire with `event(new X(...))`. |
-| Exception | `Domain/<D>/Exceptions` | `final`, extends `DomainException`, named for the situation (`EmailAlreadyRegistered`). |
-| Enum | `Domain/<D>/Enums` | Backed, PascalCase cases. |
+| ValueObject | `Domain/<D>/ValueObjects` | `final readonly`, private constructor, named constructors (`generate()`, `fromString()`), validates itself, has `equals()`. Persisted through a cast in `Casts/`. |
+| Event | `Domain/<D>/Events` | `final readonly`, extends `DomainEvent` (dispatched after commit). A past-tense fact carrying the aggregate id plus a snapshot of primitives, enums and `DateTimeImmutable` (`occurredAt`). Never an Eloquent model. Fire with `event(new X(...))`. |
+| Exception | `Domain/<D>/Exceptions` | `final`, named for the situation (`EmailAlreadyRegistered`, `InvalidStatusTransition`). |
+| Enum | `Domain/<D>/Enums` | Backed, PascalCase cases. May hold the domain's rules about itself (`TicketStatus::allowedTransitions()`). |
+| Contract | `Domain/<D>/Contracts` | Interface for something the domain needs from outside (`TicketingAccess`). |
+| Policy | `Domain/<D>/Policies` | Record-level authorization. Depends on contracts, never on another domain's internals. |
 
-Reads may use a model's query builder directly from the App layer. **Writes must go through an
-Action.**
+**Reads** may use a model's query builder directly in a controller. **Writes must go through an
+Action.** Extract a query object only when a read gains real rules or a second consumer, not by default.
 
 ## Flow of an operation
 
 ```
-Request / Livewire form
-   │ validates
-   ▼
-Payload ──► Action::execute() ──► Model / ValueObject ──► Resource / View
-                 │
-                 ├── throws DomainException  ──► mapped to HTTP status in App
-                 └── event(new DomainEvent)  ──► Listener (App) does I/O
+Request ──► FormRequest (authorize + validate) ──► payload()
+                                                      │
+                                                      ▼
+Resource ◄── Controller ◄── Action::execute() ──► Model / ValueObject
+                                  │
+                                  ├── throws DomainException ──► mapped to HTTP status in App
+                                  └── event(new DomainEvent) ──► Listener (App) does I/O
 ```
 
 Example, user registration:
@@ -88,15 +96,32 @@ Example, user registration:
    `UserRegistered`.
 4. The controller returns a `UserResource`.
 
-Actions receive the acting user as an argument (see `UpdateUserAction::execute($actor, ...)`) and
-never read `Auth`.
+Example, assigning a ticket:
+
+1. `AssignTicketRequest::authorize()` checks the `assign` policy; `payload()` builds an
+   `AssignTicketPayload`. The actor comes from `$this->user()`, never from client input.
+2. `AssignTicketController` calls `AssignTicketAction::execute($payload)`.
+3. In one transaction, the action locks the ticket, calls `Ticket::assignTo()` (which throws
+   `TicketAlreadyClosed` for a closed ticket and moves `New` to `Assigned`), saves it, records a status
+   history entry through `CreateTicketStatusHistoryAction` when the status changed, and fires
+   `TicketAssigned` after commit.
+4. The controller loads `statusHistories` and returns a `TicketResource`.
+
+Actions never read `Auth`. The acting user arrives as an argument or as `actorId` in the Payload.
 
 ## Errors
 
-Actions throw domain exceptions; the Domain never decides on a status code. Each domain's service
-provider tags an exception map implementing `Support\Contracts\MapsDomainExceptions`
-(e.g. `IdentityExceptionMap`), and `Support\Exceptions\DomainExceptionRenderer` turns a matching
-exception into a JSON response for requests that expect JSON.
+Actions throw domain exceptions; the Domain never decides on a status code. Each domain has a mapper
+(`App\Exceptions\Domain\<Domain>ExceptionsMapper`, implementing `DomainExceptionsMapper`) registered in
+`DomainExceptionsRegistry`. The handlers in `bootstrap/app.php` turn exceptions into JSON through
+`ApiErrorResponse`:
+
+- A mapped `DomainException` uses its mapped status. An unmapped one returns 422.
+- Domain exceptions are not reported (`dontReport`); they are expected outcomes.
+- Validation failures return 422 with `errors: [{field, error}]`. Unauthenticated returns 401, and a
+  CSRF mismatch (419) and other 4xx `HttpException`s keep their status.
+- Any other error returns a generic 500, except when `app.debug` is on, where Laravel's own output is
+  used.
 
 | Exception | Status |
 |---|---|
@@ -104,6 +129,24 @@ exception into a JSON response for requests that expect JSON.
 | `InvalidCredentials` | 401 |
 | `InvalidPasswordResetToken` | 422 |
 | `CannotModifyOwnAccount` | 403 |
+| `InvalidStatusTransition` | 409 |
+| `TicketAlreadyClosed` | 409 |
+| `TicketNotAssigned` | 422 |
+
+## Authentication
+
+The SPA authenticates with Sanctum's cookie-based SPA flow, not tokens:
+
+1. `GET /sanctum/csrf-cookie`, then `POST /v1/login` with the `X-XSRF-TOKEN` header and
+   `credentials: 'include'`.
+2. `LoginController` calls `AuthenticateUserAction` (credentials and events only), then establishes the
+   session itself: `Auth::guard('web')->login($user)` and `$request->session()->regenerate()`.
+3. `LogoutController` logs out, invalidates the session and regenerates the CSRF token.
+
+Setup: `$middleware->statefulApi()`, `SANCTUM_STATEFUL_DOMAINS`, `SESSION_DOMAIN`, and CORS with
+`supports_credentials` for the `v1/*` and `sanctum/csrf-cookie` paths. Routes use `auth:sanctum`, which
+also accepts bearer tokens if a non-browser client is ever needed. The SPA and API must share a
+registrable domain, or the SPA must proxy API calls through its own origin.
 
 ## Authorization
 
@@ -111,7 +154,6 @@ Capabilities are `Permission` enum cases, mapped to roles in `Role::permissions(
 
 | Permission | Admin | Member |
 |---|---|---|
-| `AccessDashboard` | yes | yes |
 | `ManageUsers` | yes | no |
 
 `IdentityServiceProvider` registers every permission as a Gate ability. Pass the enum itself, never
@@ -119,30 +161,42 @@ Capabilities are `Permission` enum cases, mapped to roles in `Role::permissions(
 
 ```php
 Route::middleware(Authorize::using(Permission::ManageUsers));
-$this->authorize(Permission::ManageUsers);
+Gate::authorize(Permission::ManageUsers);
 ```
 
-```blade
-@can(Permission::ManageUsers) ... @endcan
-```
+Record-level rules go in `Domain/<Domain>/Policies` (discovered through the `Models` → `Policies`
+sibling convention; register explicitly in the domain's provider if the namespace doesn't follow it).
+Form requests call them from `authorize()`. Invariants stay in Models and Actions as domain exceptions.
 
-Record-level rules go in `Domain/<Domain>/Policies` (auto-discovered); invariants stay in Actions
-as domain exceptions.
+When a policy needs an answer owned by another domain, it asks a contract instead of importing it:
+`TicketPolicy` depends on `TicketingAccess`, and `App\Adapters\Ticketing\IdentityTicketingAccess`
+implements it with Identity permissions.
 
 ## Routing
 
-Route files are auto-discovered by `App\Routing\DomainRouteLoader`:
+`routes/api.php` is loaded with `withRouting(api: ..., apiPrefix: '')` and scans
+`routes/api/<version>/*.php`:
 
 | File | Prefix | Name prefix |
 |---|---|---|
-| `src/Interfaces/<D>/Http/Dashboard/Routes/*.php` | none | none |
-| `src/Interfaces/<D>/Http/Api/V1/Routes/*.php` | `api/v1` | `api.v1.` |
+| `routes/api/v1/*.php` | `v1` | `v1.` |
 
-Route files declare their own `auth` / `guest` / `Authorize` middleware. `App\Midas` is reserved
-for the cross-domain app shell (the dashboard page and the `/` redirect).
+Route files declare their own `auth:sanctum` / `Authorize` middleware. HTTP code is version-first
+(`app/Http/V1/...`). A new version only gets classes for endpoints whose contract changes, and every
+version calls the same Actions.
 
 ## Tests
 
-`tests/App`, `tests/Domain`, `tests/Interfaces` and `tests/Support` mirror `src/`; `tests/Arch` holds the layer rules.
-Test every Action directly. Test controllers and Livewire pages through HTTP/Livewire, which also
-covers their requests, resources and routes.
+Tests mirror `src/` and `app/`, split by whether they need the database:
+
+| Kind | Location |
+|---|---|
+| Actions (database) | `tests/Feature/Domain/<D>/Actions/` |
+| Pure logic: ValueObjects, Enums, Policies with a fake contract | `tests/Unit/Domain/<D>/...` |
+| HTTP endpoints | `tests/Feature/Http/V1/<D>/` |
+| Layer rules | `tests/Arch/` |
+
+Test every Action directly (including the invalid-transition matrix for status changes, with the valid
+transitions written out by hand so the test is a spec, not a copy of the enum). Test controllers through
+HTTP, which also covers their requests, resources, policies and routes. Shared helpers live in
+`tests/Helpers/` and are loaded from `tests/Pest.php`.
