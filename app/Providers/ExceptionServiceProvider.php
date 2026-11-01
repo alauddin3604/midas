@@ -11,7 +11,7 @@ use Illuminate\Support\ServiceProvider;
 
 class ExceptionServiceProvider extends ServiceProvider
 {
-    public const TAG = 'domain.exception.mappers';
+    public const string TAG = 'domain.exception.mappers';
 
     /**
      * Register services.
