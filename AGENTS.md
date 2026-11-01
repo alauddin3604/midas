@@ -235,6 +235,45 @@ Request/Livewire form → validates → builds a Payload → calls an Action →
 - Authorization: capabilities are `Permission` enum cases mapped to roles in `Role::permissions()`. Each domain's `App\<Domain>\Providers\<Domain>ServiceProvider` registers them as Gate abilities (and its exception map). Pass the enum itself, never `->value`: `Authorize::using(Permission::ManageUsers)`, `$this->authorize(Permission::ManageUsers)`, `@can(Permission::ManageUsers)`. Record-level rules go in `Domain/<Domain>/Policies` (auto-discovered). Invariants stay in Actions as domain exceptions. Actions receive the acting user as an argument and never read `Auth`.
 - Tests: `tests/App`, `tests/Domain` and `tests/Support` mirror `src/`; `tests/Arch` holds layer rules. Test every Action directly. Test controllers and Livewire pages through HTTP/Livewire, which also covers their Requests, Resources and routes; give Requests, Payloads, Resources and Models their own test only when they hold real logic.
 
+=== foundation rules ===
+
+# Laravel Boost Guidelines
+
+## Foundational Context
+
+This application is a Laravel application running on PHP 8.4. Always use the APIs that match the installed major version of each package — do not assume a version.
+
+Before relying on a package's API, confirm its installed version:
+- PHP packages: run `composer show --direct` to list direct dependencies with versions, or `composer show <vendor/package>` for a single package.
+- JS packages: check `package.json` for the installed versions.
+
+## Skills Activation
+
+This project has domain-specific skills available in `**/skills/**`. You MUST activate the relevant skill whenever you work in that domain—don't wait until you're stuck.
+
+## Conventions
+
+- You must follow all existing code conventions used in this application. When creating or editing a file, check sibling files for the correct structure, approach, and naming.
+- Use descriptive names for variables and methods. For example, `isRegisteredForDiscounts`, not `discount()`.
+- Check for existing components to reuse before writing a new one.
+
+## Verification Scripts
+
+- Do not create verification scripts or tinker when tests cover that functionality and prove they work. Unit and feature tests are more important.
+
+## Application Structure & Architecture
+
+- Stick to existing directory structure; don't create new base folders without approval.
+- Do not change the application's dependencies without approval.
+
+## Frontend Bundling
+
+- If a frontend change doesn't show in the UI or you get a "Unable to locate file in Vite manifest" error, run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
+
+## Documentation Files
+
+- You must only create documentation files if explicitly requested by the user.
+
 === tests rules ===
 
 # Test Enforcement
@@ -285,6 +324,5 @@ Request/Livewire form → validates → builds a Payload → calls an Action →
 - Run the narrowest set of tests that covers the change. Pass a file path or `--filter=testName` to `php artisan test --compact`.
 - Rerun a test after each change to it.
 - Run `vendor/bin/pest` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
-- After the feature tests pass, ask the user to run the complete suite with `php artisan test --compact`.
 
 </laravel-boost-guidelines>
