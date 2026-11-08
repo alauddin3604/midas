@@ -14,16 +14,6 @@ use function Pest\Laravel\putJson;
 
 uses(RefreshDatabase::class);
 
-function actingAsAdmin(): User
-{
-    $user = User::factory()->create([
-        'role' => Role::Admin,
-    ]);
-    Sanctum::actingAs($user);
-
-    return $user;
-}
-
 it('assigns a new ticket and moves it to assigned', function (): void {
     $staff = actingAsAdmin();
     $assignee = User::factory()->create();

@@ -1,8 +1,10 @@
 <?php
 
 use Database\Factories\UserFactory;
+use Domain\Identity\Enums\Role;
 use Domain\Identity\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 require_once __DIR__.'/Helpers/ticketing.php';
@@ -26,4 +28,15 @@ pest()
 function createUser(array $attributes = []): User
 {
     return UserFactory::new()->create($attributes);
+}
+
+function actingAsAdmin(): User
+{
+    $user = createUser([
+        'role' => Role::Admin,
+    ]);
+
+    Sanctum::actingAs($user);
+
+    return $user;
 }
