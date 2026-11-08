@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Actions;
+namespace App\Actions\Identity;
 
-use Domain\Identity\Events\UserAuthenticated;
+use App\Events\Identity\UserAuthenticated;
+use App\Exceptions\Identity\InvalidCredentials;
 use Domain\Identity\Events\UserAuthenticationFailed;
-use Domain\Identity\Exceptions\InvalidCredentials;
 use Domain\Identity\Models\User;
 use Domain\Identity\Payloads\AuthenticateUserPayload;
 use Illuminate\Contracts\Hashing\Hasher;

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Exceptions;
+namespace App\Exceptions\Identity;
 
-use DomainException;
+use App\Exceptions\MidasApiException;
 
-final class InvalidCredentials extends DomainException
+final class InvalidCredentials extends MidasApiException
 {
     public static function provided(): self
     {

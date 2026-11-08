@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Actions\Identity\AuthenticateUserAction;
+use App\Events\Identity\UserAuthenticated;
+use App\Exceptions\Identity\InvalidCredentials;
 use Database\Factories\UserFactory;
-use Domain\Identity\Actions\AuthenticateUserAction;
-use Domain\Identity\Events\UserAuthenticated;
 use Domain\Identity\Events\UserAuthenticationFailed;
-use Domain\Identity\Exceptions\InvalidCredentials;
 use Domain\Identity\Payloads\AuthenticateUserPayload;
 use Illuminate\Support\Facades\Event;
 
