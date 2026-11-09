@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Identity;
 
-use Domain\Identity\Actions\DeleteUserFromEmailAction;
+use App\Actions\Identity\DeleteUserFromEmailAction;
 use Domain\Identity\Exceptions\UserNotFound;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;

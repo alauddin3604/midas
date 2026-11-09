@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Actions;
+namespace App\Actions\Identity;
 
 use Domain\Identity\Events\UserDeleted;
 use Domain\Identity\Exceptions\UserNotFound;

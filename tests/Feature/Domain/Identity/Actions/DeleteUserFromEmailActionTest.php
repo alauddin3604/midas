@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Actions\Identity\DeleteUserFromEmailAction;
 use Database\Factories\UserFactory;
-use Domain\Identity\Actions\DeleteUserFromEmailAction;
 use Domain\Identity\Events\UserDeleted;
 use Domain\Identity\Exceptions\UserNotFound;
 use Illuminate\Support\Facades\Event;
