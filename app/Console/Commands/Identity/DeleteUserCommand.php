@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Console\Commands\Identity;
 
 use App\Actions\Identity\DeleteUserFromEmailAction;
-use Domain\Identity\Exceptions\UserNotFound;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
 
 use function is_string;
@@ -48,8 +48,8 @@ final class DeleteUserCommand extends Command
             $this->info("User with email [{$email}] is successfully deleted.");
 
             return self::SUCCESS;
-        } catch (UserNotFound $e) {
-            $this->error($e->getMessage().' Please check the email.');
+        } catch (ModelNotFoundException) {
+            $this->error("User with email [{$email}] does not exist. Please check the email.");
 
             return self::FAILURE;
         }

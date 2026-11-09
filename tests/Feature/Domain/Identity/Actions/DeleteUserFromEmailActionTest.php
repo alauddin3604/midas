@@ -5,7 +5,8 @@ declare(strict_types=1);
 use App\Actions\Identity\DeleteUserFromEmailAction;
 use Database\Factories\UserFactory;
 use Domain\Identity\Events\UserDeleted;
-use Domain\Identity\Exceptions\UserNotFound;
+use Domain\Identity\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Event;
 
 use function Pest\Laravel\assertDatabaseCount;
@@ -41,8 +42,8 @@ it('cannot delete user from non exist email', function (): void {
     $action = app(DeleteUserFromEmailAction::class);
     $action->execute('joe@example.com');
 })->throws(
-    UserNotFound::class,
-    'User with email [joe@example.com] does not exist.',
+    ModelNotFoundException::class,
+    'No query results for model ['.User::class.'].',
 );
 
 it('revokes the API tokens of the deleted user', function (): void {
