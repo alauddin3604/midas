@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\V1\Identity;
 
-use Domain\Identity\Payloads\AuthenticateUserPayload;
+use App\Payloads\Identity\AuthenticateUserPayload;
 use Illuminate\Foundation\Http\FormRequest;
 
 final class LoginRequest extends FormRequest
