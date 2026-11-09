@@ -25,10 +25,9 @@ final readonly class UpdateUserPasswordAction
     {
         try {
             DB::transaction(function () use ($user, $data): void {
-                $user->update([
-                    'password' => $data->password->value,
-                    'password_changed_at' => now(),
-                ]);
+                $user->password = $data->password->value;
+                $user->password_changed_at = now();
+                $user->save();
             });
 
             event(new PasswordUpdated($user->id));

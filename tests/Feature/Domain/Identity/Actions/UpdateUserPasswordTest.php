@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Actions\Identity\UpdateUserPasswordAction;
+use App\Events\Identity\PasswordUpdated;
+use App\Exceptions\Identity\PasswordUpdateFailed;
+use App\Payloads\Identity\UpdateUserPasswordPayload;
 use Database\Factories\UserFactory;
-use Domain\Identity\Actions\UpdateUserPasswordAction;
-use Domain\Identity\Events\PasswordUpdated;
-use Domain\Identity\Exceptions\PasswordUpdateFailed;
 use Domain\Identity\Models\User;
-use Domain\Identity\Payloads\UpdateUserPasswordPayload;
 use Domain\Identity\ValueObjects\Password;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
