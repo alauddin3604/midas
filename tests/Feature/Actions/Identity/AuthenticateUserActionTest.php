@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use App\Actions\Identity\AuthenticateUserAction;
 use App\Events\Identity\UserAuthenticated;
+use App\Events\Identity\UserAuthenticationFailed;
 use App\Exceptions\Identity\InvalidCredentials;
 use App\Payloads\Identity\AuthenticateUserPayload;
 use Database\Factories\UserFactory;
-use Domain\Identity\Events\UserAuthenticationFailed;
 use Illuminate\Support\Facades\Event;
 
 it('returns the user and dispatches an authenticated event', function (): void {

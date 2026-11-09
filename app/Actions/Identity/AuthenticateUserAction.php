@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Actions\Identity;
 
 use App\Events\Identity\UserAuthenticated;
+use App\Events\Identity\UserAuthenticationFailed;
 use App\Exceptions\Identity\InvalidCredentials;
 use App\Payloads\Identity\AuthenticateUserPayload;
-use Domain\Identity\Events\UserAuthenticationFailed;
 use Domain\Identity\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
 
