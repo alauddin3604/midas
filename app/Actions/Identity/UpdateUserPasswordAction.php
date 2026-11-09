@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Actions;
+namespace App\Actions\Identity;
 
-use Domain\Identity\Events\PasswordUpdated;
-use Domain\Identity\Exceptions\PasswordUpdateFailed;
+use App\Events\Identity\PasswordUpdated;
+use App\Exceptions\Identity\PasswordUpdateFailed;
+use App\Payloads\Identity\UpdateUserPasswordPayload;
 use Domain\Identity\Models\User;
-use Domain\Identity\Payloads\UpdateUserPasswordPayload;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 final readonly class UpdateUserPasswordAction
@@ -26,9 +25,10 @@ final readonly class UpdateUserPasswordAction
     {
         try {
             DB::transaction(function () use ($user, $data): void {
-                $user->password = $data->password->value;
-                $user->password_changed_at = Carbon::now();
-                $user->save();
+                $user->update([
+                    'password' => $data->password->value,
+                    'password_changed_at' => now(),
+                ]);
             });
 
             event(new PasswordUpdated($user->id));

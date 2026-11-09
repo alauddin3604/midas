@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use App\Http\Controllers\V1\Identity\DeleteUserController;
 use App\Http\Controllers\V1\Identity\LoginController;
+use App\Http\Controllers\V1\Identity\UpdatePasswordController;
 use App\Http\V1\Controllers\Identity\CreateUserController;
 use App\Http\V1\Controllers\Identity\ListUsersController;
 use App\Http\V1\Controllers\Identity\LogoutController;
 use App\Http\V1\Controllers\Identity\RegisterController;
-use App\Http\V1\Controllers\Identity\UpdatePasswordController;
 use App\Http\V1\Controllers\Identity\UpdateUserController;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\V1\Requests\Identity;
 
-use Domain\Identity\Payloads\UpdateUserPasswordPayload;
+use App\Payloads\Identity\UpdateUserPasswordPayload;
 use Domain\Identity\ValueObjects\Password;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
