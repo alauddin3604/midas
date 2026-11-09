@@ -13,7 +13,7 @@ it('throws exception when deleting own ID', function (): void {
     $response
         ->assertConflict()
         ->assertJson([
-            'message' => 'Cannot delete own account.',
+            'message' => 'You cannot delete your own account.',
         ]);
 });
 

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Actions\Identity\DeleteUserAction;
+use App\Exceptions\Identity\CannotModifyOwnAccount;
 use Database\Factories\UserFactory;
-use Domain\Identity\Actions\DeleteUserAction;
 use Domain\Identity\Events\UserDeleted;
-use Domain\Identity\Exceptions\CannotModifyOwnAccount;
 use Illuminate\Support\Facades\Event;
 
 use function Pest\Laravel\assertDatabaseCount;
