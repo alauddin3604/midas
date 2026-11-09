@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Actions\Identity;
 
 use App\Exceptions\Identity\CannotModifyOwnAccount;
-use Domain\Identity\Events\UserDeleted;
 use Domain\Identity\Models\User;
 
 final readonly class DeleteUserAction
 {
+    public function __construct(
+        private PerformUserDeletion $performUserDeletion,
+    ) {}
+
     /**
      * @throws CannotModifyOwnAccount
      */
@@ -19,9 +22,6 @@ final readonly class DeleteUserAction
             throw CannotModifyOwnAccount::deletion();
         }
 
-        $user->tokens()->delete();
-        $user->delete();
-
-        event(new UserDeleted($user->id, $user->email, $actor->id));
+        $this->performUserDeletion->execute($user, $actor->id);
     }
 }

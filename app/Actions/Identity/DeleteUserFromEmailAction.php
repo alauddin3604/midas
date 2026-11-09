@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Actions\Identity;
 
-use Domain\Identity\Events\UserDeleted;
 use Domain\Identity\Exceptions\UserNotFound;
 use Domain\Identity\Models\User;
 
 final readonly class DeleteUserFromEmailAction
 {
+    public function __construct(
+        private PerformUserDeletion $performUserDeletion,
+    ) {}
+
     /**
      * @throws UserNotFound
      */
@@ -21,9 +24,6 @@ final readonly class DeleteUserFromEmailAction
             throw UserNotFound::withEmail($email);
         }
 
-        $user->tokens()->delete();
-        $user->delete();
-
-        event(new UserDeleted($user->id, $user->email, null));
+        $this->performUserDeletion->execute($user);
     }
 }
