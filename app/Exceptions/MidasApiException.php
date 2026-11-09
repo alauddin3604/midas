@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Exceptions;
 
 use Exception;
-use Throwable;
 use Support\Utils\ApiErrorResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 abstract class MidasApiException extends Exception
 {
@@ -20,7 +20,7 @@ abstract class MidasApiException extends Exception
         string $message,
         int $statusCode = Response::HTTP_BAD_REQUEST,
         int $code = 0,
-        Throwable|null $previous = null,
+        ?Throwable $previous = null,
     ) {
         parent::__construct($message, $code, $previous);
 

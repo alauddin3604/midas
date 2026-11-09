@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Domain\Identity\Enums\Role;
 use Domain\Identity\Models\User;
 use Domain\Ticketing\Enums\TicketStatus;
 use Domain\Ticketing\Events\TicketAssigned;
