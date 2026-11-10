@@ -30,15 +30,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(fn (): bool => true);
 
-        $exceptions->dontReport(DomainException::class);
-
-        $exceptions->render(function (DomainException $e, Request $request): JsonResponse {
-            $status = resolve(DomainExceptionsRegistry::class)->map()[$e::class]
-                ?? Response::HTTP_BAD_REQUEST;
-
-            return ApiErrorResponse::make($e->getMessage(), $status);
-        });
-
         $exceptions->render(function (ValidationException $e): JsonResponse {
             return ApiErrorResponse::make(
                 message: 'Validation failed.',

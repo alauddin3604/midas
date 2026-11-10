@@ -6,6 +6,7 @@ namespace App\Models\Identity;
 
 use App\Enums\Identity\Role;
 use App\QueryBuilders\Identity\UserQueryBuilder;
+use Carbon\CarbonInterface;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -27,7 +28,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $email
  * @property Carbon|null $email_verified_at
  * @property string $password
- * @property Carbon|null $password_changed_at
+ * @property CarbonInterface|null $password_changed_at
  * @property Role $role
  * @property string|null $remember_token
  * @property Carbon|null $created_at
