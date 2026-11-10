@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use App\Actions\Identity\DeleteUserAction;
+use App\Events\Identity\UserDeleted;
 use App\Exceptions\Identity\CannotModifyOwnAccount;
 use Database\Factories\UserFactory;
-use Domain\Identity\Events\UserDeleted;
 use Illuminate\Support\Facades\Event;
 
 use function Pest\Laravel\assertDatabaseCount;
