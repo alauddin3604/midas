@@ -6,7 +6,7 @@ namespace App\Http\Controllers\V1\Identity;
 
 use App\Actions\Identity\DeleteAccessTokenAction;
 use App\Http\V1\Controllers\ApiController;
-use Domain\Identity\Models\User;
+use App\Models\Identity\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

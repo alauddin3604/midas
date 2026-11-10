@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Identity;
 
 use App\Events\Identity\UserDeleted;
-use Domain\Identity\Models\User;
+use App\Models\Identity\User;
 
 final readonly class PerformUserDeletion
 {

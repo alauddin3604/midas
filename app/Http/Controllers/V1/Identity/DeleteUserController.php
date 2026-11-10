@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\V1\Identity;
 
 use App\Actions\Identity\DeleteUserAction;
-use Domain\Identity\Models\User;
+use App\Models\Identity\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Symfony\Component\HttpFoundation\Response;
 

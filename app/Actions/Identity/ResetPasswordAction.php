@@ -6,8 +6,8 @@ namespace App\Actions\Identity;
 
 use App\Events\Identity\PasswordReset;
 use App\Exceptions\Identity\InvalidPasswordResetToken;
+use App\Models\Identity\User;
 use App\Payloads\Identity\ResetPasswordPayload;
-use Domain\Identity\Models\User;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Support\Str;

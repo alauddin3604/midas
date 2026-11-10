@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\Identity\User;
 use Domain\Identity\Enums\Role;
-use Domain\Identity\Models\User;
 
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\postJson;

@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Identity\User;
 use Domain\Identity\Enums\Role;
-use Domain\Identity\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 

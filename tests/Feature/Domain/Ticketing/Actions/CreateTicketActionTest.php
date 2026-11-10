@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Models\Identity\User;
 use Database\Factories\UserFactory;
-use Domain\Identity\Models\User;
 use Domain\Ticketing\Actions\CreateTicketAction;
 use Domain\Ticketing\Enums\TicketPriority;
 use Domain\Ticketing\Enums\TicketStatus;

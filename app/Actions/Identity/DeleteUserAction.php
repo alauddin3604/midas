@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\Identity;
 
 use App\Exceptions\Identity\CannotModifyOwnAccount;
-use Domain\Identity\Models\User;
+use App\Models\Identity\User;
 
 final readonly class DeleteUserAction
 {

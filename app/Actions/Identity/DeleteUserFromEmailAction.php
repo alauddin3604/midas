@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions\Identity;
 
-use Domain\Identity\Models\User;
+use App\Models\Identity\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 final readonly class DeleteUserFromEmailAction

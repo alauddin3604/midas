@@ -8,7 +8,7 @@ use App\Actions\Identity\RegisterUserAction;
 use App\Http\Requests\V1\Identity\CreateUserRequest;
 use App\Http\V1\Controllers\ApiController;
 use App\Http\V1\Resources\Identity\UserResource;
-use Domain\Identity\Models\User;
+use App\Models\Identity\User;
 use Illuminate\Routing\Attributes\Controllers\Authorize;
 use Symfony\Component\HttpFoundation\Response;
 

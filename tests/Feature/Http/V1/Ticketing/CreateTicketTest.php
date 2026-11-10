@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Domain\Identity\Models\User;
+use App\Models\Identity\User;
 use Domain\Ticketing\Enums\TicketPriority;
 use Domain\Ticketing\Enums\TicketStatus;
 use Domain\Ticketing\Events\TicketCreated;

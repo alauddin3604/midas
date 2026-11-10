@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\V1\Resources\Identity;
 
-use Domain\Identity\Models\User;
+use App\Models\Identity\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

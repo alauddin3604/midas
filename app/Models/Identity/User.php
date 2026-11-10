@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Models;
+namespace App\Models\Identity;
 
+use App\QueryBuilders\Identity\UserQueryBuilder;
 use Database\Factories\UserFactory;
 use Domain\Identity\Enums\Role;
-use Domain\Identity\QueryBuilders\UserQueryBuilder;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Table;

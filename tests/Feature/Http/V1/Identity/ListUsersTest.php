@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Models\Identity\User;
 use Domain\Identity\Enums\Role;
-use Domain\Identity\Models\User;
 use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\getJson;

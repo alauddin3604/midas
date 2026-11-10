@@ -6,8 +6,8 @@ namespace App\Actions\Identity;
 
 use App\Events\Identity\PasswordUpdated;
 use App\Exceptions\Identity\PasswordUpdateFailed;
+use App\Models\Identity\User;
 use App\Payloads\Identity\UpdateUserPasswordPayload;
-use Domain\Identity\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 

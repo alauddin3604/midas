@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\Identity\User;
 use Domain\Identity\Enums\Permission;
-use Domain\Identity\Models\User;
 use Illuminate\Support\Facades\Gate;
 
 it('exposes domain permissions as gate abilities', function () {

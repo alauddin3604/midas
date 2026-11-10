@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Policies\Ticketing;
 
+use App\Models\Identity\User;
 use Domain\Identity\Enums\Permission;
-use Domain\Identity\Models\User;
 use Domain\Ticketing\Models\Ticket;
 
 final class TicketPolicy

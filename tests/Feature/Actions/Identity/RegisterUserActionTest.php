@@ -2,9 +2,9 @@
 
 use App\Actions\Identity\RegisterUserAction;
 use App\Events\Identity\UserRegistered;
+use App\Models\Identity\User;
 use App\Payloads\Identity\RegisterUserPayload;
 use Domain\Identity\Enums\Role;
-use Domain\Identity\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;

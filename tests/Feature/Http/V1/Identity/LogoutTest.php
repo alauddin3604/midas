@@ -1,6 +1,6 @@
 <?php
 
-use Domain\Identity\Models\User;
+use App\Models\Identity\User;
 
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\postJson;

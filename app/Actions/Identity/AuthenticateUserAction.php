@@ -7,8 +7,8 @@ namespace App\Actions\Identity;
 use App\Events\Identity\UserAuthenticated;
 use App\Events\Identity\UserAuthenticationFailed;
 use App\Exceptions\Identity\InvalidCredentials;
+use App\Models\Identity\User;
 use App\Payloads\Identity\AuthenticateUserPayload;
-use Domain\Identity\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
 
 final readonly class AuthenticateUserAction

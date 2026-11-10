@@ -6,9 +6,9 @@ namespace App\Actions\Identity;
 
 use App\Events\Identity\UserUpdated;
 use App\Exceptions\Identity\CannotModifyOwnAccount;
+use App\Models\Identity\User;
 use App\Payloads\Identity\UpdateUserPayload;
 use Domain\Identity\Enums\Role;
-use Domain\Identity\Models\User;
 
 final readonly class UpdateUserAction
 {

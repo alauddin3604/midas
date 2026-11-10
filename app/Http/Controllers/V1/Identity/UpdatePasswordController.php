@@ -7,7 +7,7 @@ namespace App\Http\Controllers\V1\Identity;
 use App\Actions\Identity\UpdateUserPasswordAction;
 use App\Http\V1\Controllers\ApiController;
 use App\Http\V1\Requests\Identity\UpdateUserPasswordRequest;
-use Domain\Identity\Models\User;
+use App\Models\Identity\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Symfony\Component\HttpFoundation\Response;
 

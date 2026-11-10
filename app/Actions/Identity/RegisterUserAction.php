@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Actions\Identity;
 
 use App\Events\Identity\UserRegistered;
+use App\Models\Identity\User;
 use App\Payloads\Identity\RegisterUserPayload;
-use Domain\Identity\Models\User;
 
 final readonly class RegisterUserAction
 {

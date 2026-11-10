@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\QueryBuilders;
+namespace App\QueryBuilders\Identity;
 
-use Domain\Identity\Models\User;
+use App\Models\Identity\User;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
