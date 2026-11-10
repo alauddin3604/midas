@@ -7,7 +7,7 @@ namespace App\Policies\Identity;
 use App\Enums\Identity\Permission;
 use App\Models\Identity\User;
 
-class UserPolicy
+final class UserPolicy
 {
     public function viewAny(User $actor): bool
     {
