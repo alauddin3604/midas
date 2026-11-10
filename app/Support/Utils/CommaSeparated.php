@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Support\Utils;
+namespace App\Support\Utils;
 
 final class CommaSeparated
 {

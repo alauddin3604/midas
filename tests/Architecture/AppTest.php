@@ -27,3 +27,9 @@ arch('Query builders must be final Eloquent builders suffixed with QueryBuilder'
     ->toBeFinal()
     ->toExtend(Builder::class)
     ->toHaveSuffix('QueryBuilder');
+
+arch('Support does not depend on App')
+    ->expect('App\Support')
+    ->not->toUse([
+        'App',
+    ]);
