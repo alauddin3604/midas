@@ -28,24 +28,12 @@ it('can delete user', function (): void {
     assertModelMissing($user);
 });
 
-it('idempotent when user is already deleted', function (): void {
-    $user = createUser();
-
-    $user->delete();
-
-    actingAsAdmin();
-
-    assertModelMissing($user);
-
-    $response = deleteJson(route('v1.users.destroy', $user));
-
-    $response->assertNoContent();
-});
-
-it('idempotent when user does not exists', function (): void {
+it('cannot delete user when user does not exists', function (): void {
     actingAsAdmin();
 
     $response = deleteJson(route('v1.users.destroy', 99999));
-
-    $response->assertNoContent();
+    $response->assertNotFound();
+    $response->assertJson([
+        'message' => 'The requested URL or resource does not exist.',
+    ]);
 });

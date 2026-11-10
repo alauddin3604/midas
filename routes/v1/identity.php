@@ -10,7 +10,6 @@ use App\Http\V1\Controllers\Identity\ListUsersController;
 use App\Http\V1\Controllers\Identity\LogoutController;
 use App\Http\V1\Controllers\Identity\RegisterController;
 use App\Http\V1\Controllers\Identity\UpdateUserController;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 
 Route::post('register', RegisterController::class)
@@ -42,6 +41,5 @@ Route::prefix('users')
             ->name('update');
 
         Route::delete('{user}', DeleteUserController::class)
-            ->name('destroy')
-            ->missing(fn (): Response => new Response(status: 204));
+            ->name('destroy');
     });
