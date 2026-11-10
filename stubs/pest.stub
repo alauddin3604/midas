@@ -1,0 +1,11 @@
+<?php
+
+declare(strict_types=1);
+
+use function Pest\Laravel\getJson;
+
+it('can test', function (): void {
+    $response = getJson('/');
+
+    $response->assertStatus(200);
+});

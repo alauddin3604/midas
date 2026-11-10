@@ -87,3 +87,35 @@ Request → FormRequest validates and authorizes → builds a Payload → Contro
 - Authorization: capabilities are `Permission` enum cases mapped to roles in `Role::permissions()`. Each context's `<Context>ServiceProvider` registers them as Gate abilities. Pass the enum itself, never `->value`: `Authorize::using(Permission::ManageUsers)`, `Gate::authorize(Permission::ManageUsers)`. Record-level rules go in `app/Policies/<Context>` (auto-discovered through the `Models` → `Policies` namespace convention). Invariants stay in Actions and Models as exceptions. Actions receive the acting user as an argument or as `actorId` in the Payload and never read `Auth`.
 - Architecture tests: `tests/Arch` uses Pest presets (`php()`, `security()`, `strict()`) plus layer and shape rules. `strict()` ignores `ApiController`, `Event` and `App\Models`; models get their own final and strict types rules. Add to `ignoring()` only for a genuine base class or framework convention, with a comment.
 - Tests: mirror `app/`; `tests/Arch` holds layer rules. Test every Action directly (`tests/Feature/Actions/<Context>/`). Test controllers through HTTP (`tests/Feature/Http/V1/<Context>/`), which also covers their Requests, Resources, policies and routes. Pure logic (ValueObjects, Enums, Policies with a fake contract) goes in `tests/Unit/`. Give Requests, Payloads, Resources and Models their own test only when they hold real logic.
+
+### 7. Scaffolding
+
+Generate new classes with Artisan instead of writing the file by hand, so the namespace and path follow the layout above. The published stubs in `stubs/` already produce `declare(strict_types=1)`, `final`, and the right base class. Edit the generated file afterwards to fill in the body.
+
+Names are relative to each generator's default namespace, so always include the `<Context>/` folder.
+
+| Block | Command |
+|---|---|
+| Controller | `php artisan make:controller V1/<Context>/<Operation>Controller --invokable` |
+| Request | `php artisan make:request V1/<Context>/<Operation>Request` |
+| Resource | `php artisan make:resource V1/<Context>/<Model>Resource` |
+| Action | `php artisan make:class Actions/<Context>/<Operation>Action` |
+| Payload | `php artisan make:class Payloads/<Context>/<Operation>Payload` |
+| ValueObject | `php artisan make:class ValueObjects/<Context>/<Name>` |
+| Query builder | `php artisan make:class QueryBuilders/<Context>/<Model>QueryBuilder` |
+| Event | `php artisan make:event <Context>/<PastTenseFact>` |
+| Exception | `php artisan make:exception <Context>/<Situation>` |
+| Enum | `php artisan make:enum <Context>/<Name> --string` |
+| Model | `php artisan make:model <Context>/<Model>` |
+| Factory | `php artisan make:factory <Context>/<Model>Factory --model=<Context>/<Model>` |
+| Policy | `php artisan make:policy <Context>/<Model>Policy --model=<Context>/<Model>` |
+| Command | `php artisan make:command <Context>/<Name>Command` |
+| Feature test | `php artisan make:test Actions/<Context>/<Operation>ActionTest --pest` |
+| Unit test | `php artisan make:test <Layer>/<Context>/<Name>Test --pest --unit` |
+
+After generating, finish what the stubs can't do:
+- Action: add the single public `execute()` method.
+- Query builder: make it `extends Builder` (Eloquent's) and attach it to the model with `#[UseEloquentBuilder]`.
+- Exception: pass the HTTP status to `parent::__construct()`.
+- ValueObject: add a private constructor and named constructors.
+- Never edit generated files to loosen an arch test; fix the code instead.

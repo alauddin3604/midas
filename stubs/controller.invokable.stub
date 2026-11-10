@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use {{ rootNamespace }}Http\Controllers\V1\ApiController;
+use Symfony\Component\HttpFoundation\Response;
+
+final class {{ class }} extends ApiController
+{
+    public function __invoke(): Response
+    {
+        return response()->noContent();
+    }
+}
