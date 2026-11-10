@@ -67,7 +67,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (Throwable $e, Request $request): ?JsonResponse {
-            if (config('app.debug')) {
+            if (config()->boolean('app.debug')) {
                 return null;
             }
 
