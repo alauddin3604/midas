@@ -6,6 +6,14 @@ use App\Http\Controllers\V1\ApiController;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 
+arch('Actions are final, readonly classes suffixed with Action')
+    ->expect('App\Actions')
+    ->toBeClasses()
+    ->toBeFinal()
+    ->toBeReadonly()
+    ->toHaveSuffix('Action')
+    ->toHaveMethod('execute');
+
 arch('console commands are final and extend Command')
     ->expect('App\Console\Commands')
     ->toBeClasses()

@@ -10,7 +10,7 @@ use App\Models\Identity\User;
 final readonly class DeleteUserAction
 {
     public function __construct(
-        private PerformUserDeletion $performUserDeletion,
+        private PerformUserDeletionAction $performUserDeletion,
     ) {}
 
     /**

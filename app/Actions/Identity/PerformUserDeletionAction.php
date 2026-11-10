@@ -7,7 +7,7 @@ namespace App\Actions\Identity;
 use App\Events\Identity\UserDeleted;
 use App\Models\Identity\User;
 
-final readonly class PerformUserDeletion
+final readonly class PerformUserDeletionAction
 {
     public function execute(User $user, ?string $actorId = null): void
     {

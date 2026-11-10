@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 final readonly class DeleteUserFromEmailAction
 {
     public function __construct(
-        private PerformUserDeletion $performUserDeletion,
+        private PerformUserDeletionAction $performUserDeletion,
     ) {}
 
     /**
