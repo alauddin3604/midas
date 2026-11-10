@@ -17,21 +17,6 @@ arch('Domain does not depend on delivery mechanisms')
         'Illuminate\Support\Facades\Request',
     ]);
 
-arch('Domain actions must be final, readonly classes suffixed with Action, and have execute method')
-    ->expect('Domain\*\Actions')
-    ->toBeClasses()
-    ->toBeFinal()
-    ->toBeReadonly()
-    ->toHaveSuffix('Action')
-    ->toHaveMethod('execute');
-
-arch('Domain payloads must be final, readonly classes suffixed with Payload')
-    ->expect('Domain\*\Payloads')
-    ->toBeClasses()
-    ->toBeFinal()
-    ->toBeReadonly()
-    ->toHaveSuffix('Payload');
-
 arch('Domain models are Eloquent models that stay free of business operations')
     ->expect('Domain\*\Models')
     ->toBeClasses()

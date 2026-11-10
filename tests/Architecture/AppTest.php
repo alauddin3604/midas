@@ -21,6 +21,13 @@ arch('API controllers are final, invokable and extend ApiController')
     ->toExtend(ApiController::class)
     ->toHaveSuffix('Controller');
 
+arch('Payloads must be final, readonly classes suffixed with Payload')
+    ->expect('App\Payloads\*')
+    ->toBeClasses()
+    ->toBeFinal()
+    ->toBeReadonly()
+    ->toHaveSuffix('Payload');
+
 arch('Query builders must be final Eloquent builders suffixed with QueryBuilder')
     ->expect('App\QueryBuilders\*')
     ->toBeClasses()
