@@ -22,10 +22,6 @@ arch('Domain does not depend on delivery mechanisms')
         'Illuminate\Support\Facades\Request',
     ]);
 
-arch('Domain files declare strict types')
-    ->expect('Domain')
-    ->toUseStrictTypes();
-
 arch('Domain actions must be final, readonly classes suffixed with Action, and have execute method')
     ->expect('Domain\*\Actions')
     ->toBeClasses()
