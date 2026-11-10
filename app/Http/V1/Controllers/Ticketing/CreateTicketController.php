@@ -9,14 +9,13 @@ use App\Http\V1\Requests\Ticketing\CreateTicketRequest;
 use App\Http\V1\Resources\Ticketing\TicketResource;
 use Domain\Ticketing\Actions\CreateTicketAction;
 use Domain\Ticketing\Models\Ticket;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Attributes\Controllers\Authorize;
 use Symfony\Component\HttpFoundation\Response;
 
 final class CreateTicketController extends ApiController
 {
     #[Authorize('create', Ticket::class)]
-    public function __invoke(CreateTicketRequest $request, CreateTicketAction $action): JsonResponse
+    public function __invoke(CreateTicketRequest $request, CreateTicketAction $action): Response
     {
         $ticket = $action->execute($request->payload());
 

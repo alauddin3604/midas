@@ -8,13 +8,13 @@ use App\Http\Controllers\V1\ApiController;
 use App\Http\Requests\V1\Identity\ListUsersRequest;
 use App\Http\Resources\V1\Identity\UserResource;
 use App\Models\Identity\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Attributes\Controllers\Authorize;
+use Symfony\Component\HttpFoundation\Response;
 
 final class ListUsersController extends ApiController
 {
     #[Authorize('viewAny', User::class)]
-    public function __invoke(ListUsersRequest $request): JsonResponse
+    public function __invoke(ListUsersRequest $request): Response
     {
         $users = User::query()
             ->search($request->validated('search'))

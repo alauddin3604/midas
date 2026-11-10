@@ -8,7 +8,7 @@ use App\Actions\Identity\DeleteAccessTokenAction;
 use App\Http\Controllers\V1\ApiController;
 use App\Models\Identity\User;
 use Illuminate\Container\Attributes\CurrentUser;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 final class LogoutController extends ApiController
 {

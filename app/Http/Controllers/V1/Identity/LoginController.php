@@ -8,13 +8,13 @@ use App\Actions\Identity\AuthenticateUserAction;
 use App\Exceptions\Identity\InvalidCredentials;
 use App\Http\Controllers\V1\ApiController;
 use App\Http\Requests\V1\Identity\LoginRequest;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
 
 final class LoginController extends ApiController
 {
-    public function __invoke(LoginRequest $request, AuthenticateUserAction $action): JsonResponse
+    public function __invoke(LoginRequest $request, AuthenticateUserAction $action): Response
     {
         try {
             $user = $action->execute($request->payload());

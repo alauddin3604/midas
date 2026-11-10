@@ -9,8 +9,8 @@ use App\Http\Controllers\V1\ApiController;
 use App\Http\Requests\V1\Identity\UpdateUserRequest;
 use App\Models\Identity\User;
 use Illuminate\Container\Attributes\CurrentUser;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Attributes\Controllers\Authorize;
+use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateUserController extends ApiController
 {
