@@ -42,7 +42,7 @@ arch('Enums must be enums')
     ->toBeEnums();
 
 arch('Models are Eloquent models that stay free of business operations')
-    ->expect('Domain\*\Models')
+    ->expect('App\Models')
     ->toBeClasses()
     ->toExtend(Model::class)
     ->not->toUse('App\Actions');
