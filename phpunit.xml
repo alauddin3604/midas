@@ -18,7 +18,7 @@
     <source>
         <include>
             <directory>app</directory>
-            <directory>src</directory>
+            <directory>routes</directory>
         </include>
     </source>
     <php>
