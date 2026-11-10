@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\V1\ApiController;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 arch('Actions are final, readonly classes suffixed with Action')
@@ -35,6 +36,16 @@ arch('API controllers are final, invokable and extend ApiController')
     ->toBeInvokable()
     ->toExtend(ApiController::class)
     ->toHaveSuffix('Controller');
+
+arch('Enums must be enums')
+    ->expect('App\Enums')
+    ->toBeEnums();
+
+arch('Models are Eloquent models that stay free of business operations')
+    ->expect('Domain\*\Models')
+    ->toBeClasses()
+    ->toExtend(Model::class)
+    ->not->toUse('App\Actions');
 
 arch('Payloads must be final, readonly classes suffixed with Payload')
     ->expect('App\Payloads\*')
