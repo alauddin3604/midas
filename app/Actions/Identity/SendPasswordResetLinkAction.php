@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Actions;
+namespace App\Actions\Identity;
 
-use Domain\Identity\Events\PasswordResetLinkRequested;
-use Domain\Identity\Payloads\SendPasswordResetLinkPayload;
+use App\Events\Identity\PasswordResetLinkRequested;
+use App\Payloads\Identity\SendPasswordResetLinkPayload;
 use Illuminate\Contracts\Auth\PasswordBroker;
 
 final readonly class SendPasswordResetLinkAction

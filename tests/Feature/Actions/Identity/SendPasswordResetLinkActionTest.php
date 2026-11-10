@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Actions\Identity\SendPasswordResetLinkAction;
+use App\Events\Identity\PasswordResetLinkRequested;
+use App\Payloads\Identity\SendPasswordResetLinkPayload;
 use Database\Factories\UserFactory;
-use Domain\Identity\Actions\SendPasswordResetLinkAction;
-use Domain\Identity\Events\PasswordResetLinkRequested;
-use Domain\Identity\Payloads\SendPasswordResetLinkPayload;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 

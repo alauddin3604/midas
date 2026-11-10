@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Events;
+namespace App\Events\Identity;
 
 use Support\Bases\Events\DomainEvent;
 

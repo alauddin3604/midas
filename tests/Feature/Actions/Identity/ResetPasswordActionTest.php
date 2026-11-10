@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Actions\Identity\ResetPasswordAction;
+use App\Events\Identity\PasswordReset;
+use App\Exceptions\Identity\InvalidPasswordResetToken;
+use App\Payloads\Identity\ResetPasswordPayload;
 use Database\Factories\UserFactory;
-use Domain\Identity\Actions\ResetPasswordAction;
-use Domain\Identity\Events\PasswordReset;
-use Domain\Identity\Exceptions\InvalidPasswordResetToken;
-use Domain\Identity\Payloads\ResetPasswordPayload;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;

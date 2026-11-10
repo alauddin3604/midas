@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Actions\Identity\DeleteUserFromEmailAction;
+use App\Events\Identity\UserDeleted;
 use Database\Factories\UserFactory;
-use Domain\Identity\Events\UserDeleted;
 use Domain\Identity\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Event;

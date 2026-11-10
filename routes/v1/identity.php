@@ -5,11 +5,11 @@ declare(strict_types=1);
 use App\Http\Controllers\V1\Identity\CreateUserController;
 use App\Http\Controllers\V1\Identity\DeleteUserController;
 use App\Http\Controllers\V1\Identity\LoginController;
+use App\Http\Controllers\V1\Identity\LogoutController;
 use App\Http\Controllers\V1\Identity\RegisterController;
 use App\Http\Controllers\V1\Identity\UpdatePasswordController;
 use App\Http\Controllers\V1\Identity\UpdateUserController;
 use App\Http\V1\Controllers\Identity\ListUsersController;
-use App\Http\V1\Controllers\Identity\LogoutController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('register', RegisterController::class)

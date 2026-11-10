@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Actions;
+namespace App\Actions\Identity;
 
-use Domain\Identity\Events\PasswordReset;
-use Domain\Identity\Exceptions\InvalidPasswordResetToken;
+use App\Events\Identity\PasswordReset;
+use App\Exceptions\Identity\InvalidPasswordResetToken;
+use App\Payloads\Identity\ResetPasswordPayload;
 use Domain\Identity\Models\User;
-use Domain\Identity\Payloads\ResetPasswordPayload;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Support\Str;

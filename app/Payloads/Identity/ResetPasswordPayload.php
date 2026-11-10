@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Payloads;
+namespace App\Payloads\Identity;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Override;
