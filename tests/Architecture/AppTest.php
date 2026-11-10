@@ -13,9 +13,11 @@ arch('console commands are final and extend Command')
     ->toExtend(Command::class)
     ->toHaveSuffix('Command');
 
-arch('API controllers are final and extend ApiController')
+arch('API controllers are final, invokable and extend ApiController')
     ->expect('App\Http\Controllers\V1\*')
     ->toBeClasses()
+    ->toBeFinal()
+    ->toBeInvokable()
     ->toExtend(ApiController::class)
     ->toHaveSuffix('Controller');
 
