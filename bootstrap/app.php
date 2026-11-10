@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Exceptions\Domain\DomainExceptionsRegistry;
+use App\Exceptions\MidasApiException;
 use App\Support\Utils\ApiErrorResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
@@ -29,6 +29,10 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(fn (): bool => true);
+
+        $exceptions->dontReport([
+            MidasApiException::class,
+        ]);
 
         $exceptions->render(function (ValidationException $e): JsonResponse {
             return ApiErrorResponse::make(
