@@ -16,8 +16,12 @@ return RectorConfig::configure()
     ])
     ->withSkip([
         __DIR__.'/bootstrap/cache',
+        __DIR__.'/database',
         __DIR__.'/storage',
         __DIR__.'/vendor',
+        StaticFacadeToServiceMethodCallRector::class => [
+            __DIR__.'/app/Providers',
+        ],
     ])
     ->withComposerBased(
         laravel: true,
@@ -26,7 +30,7 @@ return RectorConfig::configure()
         LaravelSetList::LARAVEL_CODE_QUALITY,
         LaravelSetList::LARAVEL_COLLECTION,
         LaravelSetList::LARAVEL_ELOQUENT_MAGIC_METHOD_TO_QUERY_BUILDER,
-        // LaravelSetList::LARAVEL_FACTORIES,
+        LaravelSetList::LARAVEL_STATIC_TO_INJECTION,
     ])
     ->withRules([
         ConfigToTypedConfigMethodCallRector::class,
