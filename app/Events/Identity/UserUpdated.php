@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Events\Identity;
 
-use Support\Bases\Events\DomainEvent;
+use App\Events\Event;
 
-final readonly class UserUpdated extends DomainEvent
+final readonly class UserUpdated extends Event
 {
     /**
      * @param  array<string, array{old: string, new: string}>  $changes

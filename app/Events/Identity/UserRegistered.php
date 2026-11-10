@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Events\Identity;
 
-use Support\Bases\Events\DomainEvent;
+use App\Events\Event;
 
-final readonly class UserRegistered extends DomainEvent
+final readonly class UserRegistered extends Event
 {
     public function __construct(
         public string $userId,

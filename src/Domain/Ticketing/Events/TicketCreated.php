@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Domain\Ticketing\Events;
 
+use App\Events\Event;
 use DateTimeImmutable;
 use Domain\Ticketing\Enums\TicketPriority;
 use Domain\Ticketing\Models\Ticket;
-use Support\Bases\Events\DomainEvent;
 
-final readonly class TicketCreated extends DomainEvent
+final readonly class TicketCreated extends Event
 {
     public function __construct(
         public string $ticketId,

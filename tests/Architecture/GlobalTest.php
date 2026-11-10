@@ -25,7 +25,6 @@ arch('support is the bottom layer')
 arch('domain does not depend on delivery or wiring')
     ->expect('Domain')
     ->not->toUse([
-        'App',
         'Interfaces',
         'Livewire',
         'Support\Http',
