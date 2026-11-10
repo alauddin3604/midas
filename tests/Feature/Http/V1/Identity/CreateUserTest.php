@@ -28,6 +28,33 @@ it('cannot create a user if unauthorized', function (): void {
     ]);
 });
 
+it('cannot create a user if the email is already registered', function (): void {
+    $admin = createUser([
+        'role' => Role::Admin,
+    ]);
+
+    createUser([
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
+        'password' => 'Password#123',
+        'role' => 'member',
+    ]);
+
+    Sanctum::actingAs($admin);
+
+    $response = postJson(route('v1.users.store'), [
+        'name' => 'John Doe',
+        'email' => 'john@example.com',
+        'password' => 'Password#123',
+        'role' => 'member',
+    ]);
+
+    $response->assertUnprocessable();
+    $response->assertInvalid([
+        'email' => 'The email has already been taken',
+    ]);
+});
+
 it('can create a user', function (): void {
     $admin = createUser([
         'role' => Role::Admin,

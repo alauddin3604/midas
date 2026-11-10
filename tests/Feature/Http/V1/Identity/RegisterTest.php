@@ -39,14 +39,14 @@ it('answers 409 for an email that is already registered', function (): void {
         'email' => 'jane@example.com',
         'password' => 'secret-password',
     ])
-        ->assertConflict()
-        ->assertJson([
-            'message' => 'A user with email [jane@example.com] is already registered.',
+        ->assertUnprocessable()
+        ->assertInvalid([
+            'email' => 'The email has already been taken.',
         ]);
 });
 
 it('validates the payload', function (): void {
     postJson(route('v1.register'), [])
         ->assertUnprocessable()
-        ->assertJsonPath('errors.*.field', ['name', 'email', 'password']);
+        ->assertInvalid(['name', 'email', 'password']);
 });

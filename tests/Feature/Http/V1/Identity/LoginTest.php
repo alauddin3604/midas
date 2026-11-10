@@ -30,7 +30,7 @@ it('rejects a wrong password', function () {
         ->assertUnprocessable()
         ->assertExactJson([
             'message' => 'Validation failed.',
-            'errors' => [['field' => 'email', 'error' => 'The provided credentials are incorrect.']],
+            'errors' => ['email' => ['The provided credentials are incorrect.']],
         ]);
 
     assertDatabaseCount('personal_access_tokens', 0);
@@ -39,13 +39,13 @@ it('rejects a wrong password', function () {
 it('rejects an unknown email', function () {
     postJson(route('v1.login'), ['email' => 'nobody@example.com', 'password' => 'password'])
         ->assertUnprocessable()
-        ->assertJsonPath('errors.0.field', 'email');
+        ->assertInvalid(['email' => 'The provided credentials are incorrect.']);
 });
 
 it('validates the payload', function () {
     postJson(route('v1.login'), [])
         ->assertUnprocessable()
-        ->assertJsonPath('errors.*.field', ['email', 'password']);
+        ->assertInvalid(['email', 'password']);
 });
 
 it('throttles repeated attempts', function () {

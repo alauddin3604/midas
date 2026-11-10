@@ -85,7 +85,7 @@ it('validates the assignee', function (array $body): void {
 
     $response = putJson(route('v1.tickets.assign', $ticket), $body)->assertUnprocessable();
 
-    expect(collect($response->json('errors'))->pluck('field')->all())->toContain('assignee_id');
+    $response->assertInvalid(['assignee_id']);
 })->with([
     'missing' => [[]],
     'not an integer' => [['assignee_id' => 'abc']],

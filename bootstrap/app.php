@@ -40,16 +40,10 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (ValidationException $e): JsonResponse {
-            $errors = [];
-
-            foreach ($e->errors() as $field => $messages) {
-                $errors[] = ['field' => (string) $field, 'error' => $messages[0]];
-            }
-
             return ApiErrorResponse::make(
                 message: 'Validation failed.',
                 status: $e->status,
-                errors: $errors,
+                errors: $e->errors(),
             );
         });
 

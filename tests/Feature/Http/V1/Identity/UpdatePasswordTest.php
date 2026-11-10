@@ -18,9 +18,8 @@ it('rejects invalid passwords', function (mixed $password, mixed $confirmation, 
 
     putJson(route('v1.password.update'), ['password' => $password, 'password_confirmation' => $confirmation])
         ->assertUnprocessable()
-        ->assertJson([
-            'message' => 'Validation failed.',
-            'errors' => [['field' => 'password', 'error' => $error]],
+        ->assertInvalid([
+            'password' => [$error],
         ]);
 })->with([
     'empty' => ['', '', 'The password field is required.'],

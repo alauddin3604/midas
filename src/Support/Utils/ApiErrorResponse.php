@@ -11,7 +11,7 @@ final class ApiErrorResponse
     /**
      * Build the shared error envelope: a message plus a list of field-level errors.
      *
-     * @param  list<array{field: string, error: string}>  $errors
+     * @param  array<string, list<string>>  $errors
      * @param  array<string, string>  $headers
      */
     public static function make(string $message, int $status, array $errors = [], array $headers = []): JsonResponse

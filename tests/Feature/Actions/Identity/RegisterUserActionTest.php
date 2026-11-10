@@ -2,10 +2,10 @@
 
 use App\Actions\Identity\RegisterUserAction;
 use App\Events\Identity\UserRegistered;
-use App\Exceptions\Identity\EmailAlreadyRegistered;
 use App\Payloads\Identity\RegisterUserPayload;
 use Domain\Identity\Enums\Role;
 use Domain\Identity\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 
@@ -52,4 +52,4 @@ it('refuses to register a duplicate email', function () {
     app(RegisterUserAction::class)->execute(
         new RegisterUserPayload('Jane Doe', 'jane@example.com', 'secret-password'),
     );
-})->throws(EmailAlreadyRegistered::class);
+})->throws(QueryException::class);

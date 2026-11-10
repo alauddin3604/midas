@@ -143,7 +143,7 @@ it('rejects invalid input', function (array $overrides, string $field): void {
         ->assertUnprocessable()
         ->assertJsonPath('message', 'Validation failed.');
 
-    expect(collect($response->json('errors'))->pluck('field')->all())->toContain($field);
+    $response->assertInvalid([$field]);
 
     assertDatabaseCount('tickets', 0);
 })->with('invalid create ticket payloads');
