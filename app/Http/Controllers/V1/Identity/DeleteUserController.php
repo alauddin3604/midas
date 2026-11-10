@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\V1\Identity;
 
 use App\Actions\Identity\DeleteUserAction;
+use App\Http\Controllers\V1\ApiController;
 use App\Models\Identity\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Symfony\Component\HttpFoundation\Response;
 
-final readonly class DeleteUserController
+final class DeleteUserController extends ApiController
 {
     /**
      * Handle the incoming request.

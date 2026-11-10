@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Http\V1\Controllers\ApiController;
+use App\Http\Controllers\V1\ApiController;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -14,7 +14,7 @@ arch('console commands are final and extend Command')
     ->toHaveSuffix('Command');
 
 arch('API controllers are final and extend ApiController')
-    ->expect('App\Http\V1\Controllers')
+    ->expect('App\Http\Controllers\V1\*')
     ->toBeClasses()
     ->toExtend(ApiController::class)
     ->toHaveSuffix('Controller');

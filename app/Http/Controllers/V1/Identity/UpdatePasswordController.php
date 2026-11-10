@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\V1\Identity;
 
 use App\Actions\Identity\UpdateUserPasswordAction;
+use App\Http\Controllers\V1\ApiController;
 use App\Http\Requests\V1\Identity\UpdateUserPasswordRequest;
-use App\Http\V1\Controllers\ApiController;
 use App\Models\Identity\User;
 use Illuminate\Container\Attributes\CurrentUser;
 use Symfony\Component\HttpFoundation\Response;

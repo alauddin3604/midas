@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\V1\Controllers;
+namespace App\Http\Controllers\V1;
 
 abstract class ApiController
 {

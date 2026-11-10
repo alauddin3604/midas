@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\V1\Controllers\Ticketing;
 
-use App\Http\V1\Controllers\ApiController;
+use App\Http\Controllers\V1\ApiController;
 use App\Http\V1\Requests\Ticketing\CreateTicketRequest;
 use App\Http\V1\Resources\Ticketing\TicketResource;
 use Domain\Ticketing\Actions\CreateTicketAction;

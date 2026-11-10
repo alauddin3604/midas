@@ -6,8 +6,8 @@ namespace App\Http\Controllers\V1\Identity;
 
 use App\Actions\Identity\AuthenticateUserAction;
 use App\Exceptions\Identity\InvalidCredentials;
+use App\Http\Controllers\V1\ApiController;
 use App\Http\Requests\V1\Identity\LoginRequest;
-use App\Http\V1\Controllers\ApiController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
