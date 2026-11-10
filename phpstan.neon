@@ -4,7 +4,7 @@ includes:
 
 parameters:
     paths:
-        - src/
+        - app
         - bootstrap/app.php
         - config/
         - database/

@@ -18,7 +18,6 @@ class ExceptionServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->tag([
-            TicketingExceptionsMapper::class,
         ], self::TAG);
 
         $this->app->when(DomainExceptionsRegistry::class)
