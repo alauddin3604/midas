@@ -55,3 +55,23 @@ it('dispatch an event after updating a user', function (): void {
 
     Event::assertDispatched(UserUpdated::class);
 });
+
+it('cannot update user if it does not exist', function (): void {
+    $admin = createUser([
+        'role' => Role::Admin,
+    ]);
+
+    Sanctum::actingAs($admin);
+
+    $response = putJson(route('v1.users.update', 999), [
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'role' => Role::Member->value,
+    ]);
+
+    $response
+        ->assertNotFound()
+        ->assertJson([
+            'message' => 'The requested URL or resource does not exist.',
+        ]);
+});

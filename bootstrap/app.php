@@ -64,7 +64,7 @@ return Application::configure(basePath: dirname(__DIR__))
             }
 
             $message = match (true) {
-                $e instanceof NotFoundHttpException => 'Not found.',
+                $e instanceof NotFoundHttpException => 'The requested URL or resource does not exist.',
                 $e->getMessage() !== '' => $e->getMessage(),
                 isset(Response::$statusTexts[$e->getStatusCode()]) => Response::$statusTexts[$e->getStatusCode()],
                 default => 'Error.',
