@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
+use App\Actions\Identity\UpdateUserAction;
+use App\Events\Identity\UserUpdated;
+use App\Exceptions\Identity\CannotModifyOwnAccount;
+use App\Exceptions\Identity\EmailAlreadyRegistered;
+use App\Payloads\Identity\UpdateUserPayload;
 use Database\Factories\UserFactory;
-use Domain\Identity\Actions\UpdateUserAction;
 use Domain\Identity\Enums\Role;
-use Domain\Identity\Events\UserUpdated;
-use Domain\Identity\Exceptions\CannotModifyOwnAccount;
-use Domain\Identity\Exceptions\EmailAlreadyRegistered;
-use Domain\Identity\Payloads\UpdateUserPayload;
 use Illuminate\Support\Facades\Event;
 
 it('updates the user and dispatches the changed attributes', function (): void {

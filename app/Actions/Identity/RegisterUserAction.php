@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Actions;
+namespace App\Actions\Identity;
 
-use Domain\Identity\Events\UserRegistered;
-use Domain\Identity\Exceptions\EmailAlreadyRegistered;
+use App\Events\Identity\UserRegistered;
+use App\Exceptions\Identity\EmailAlreadyRegistered;
+use App\Payloads\Identity\RegisterUserPayload;
 use Domain\Identity\Models\User;
-use Domain\Identity\Payloads\RegisterUserPayload;
 
 final readonly class RegisterUserAction
 {

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Events\Identity\UserUpdated;
 use Domain\Identity\Enums\Role;
-use Domain\Identity\Events\UserUpdated;
 use Domain\Identity\Models\User;
 use Illuminate\Support\Facades\Event;
 use Laravel\Sanctum\Sanctum;

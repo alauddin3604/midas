@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\V1\Controllers\Identity;
+namespace App\Http\Controllers\V1\Identity;
 
+use App\Actions\Identity\UpdateUserAction;
+use App\Http\Requests\V1\Identity\UpdateUserRequest;
 use App\Http\V1\Controllers\ApiController;
-use App\Http\V1\Requests\Identity\UpdateUserRequest;
-use Domain\Identity\Actions\UpdateUserAction;
 use Domain\Identity\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Attributes\Controllers\Authorize;

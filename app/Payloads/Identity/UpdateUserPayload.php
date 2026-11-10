@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Payloads;
+namespace App\Payloads\Identity;
 
 use Domain\Identity\Enums\Role;
 use Illuminate\Contracts\Support\Arrayable;

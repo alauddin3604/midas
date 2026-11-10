@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\V1\Requests\Identity;
+namespace App\Http\Requests\V1\Identity;
 
-use Domain\Identity\Payloads\RegisterUserPayload;
+use App\Payloads\Identity\RegisterUserPayload;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 

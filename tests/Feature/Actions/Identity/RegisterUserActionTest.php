@@ -1,11 +1,11 @@
 <?php
 
-use Domain\Identity\Actions\RegisterUserAction;
+use App\Actions\Identity\RegisterUserAction;
+use App\Events\Identity\UserRegistered;
+use App\Exceptions\Identity\EmailAlreadyRegistered;
+use App\Payloads\Identity\RegisterUserPayload;
 use Domain\Identity\Enums\Role;
-use Domain\Identity\Events\UserRegistered;
-use Domain\Identity\Exceptions\EmailAlreadyRegistered;
 use Domain\Identity\Models\User;
-use Domain\Identity\Payloads\RegisterUserPayload;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 

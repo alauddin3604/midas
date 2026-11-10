@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Actions;
+namespace App\Actions\Identity;
 
+use App\Events\Identity\UserUpdated;
+use App\Exceptions\Identity\CannotModifyOwnAccount;
+use App\Exceptions\Identity\EmailAlreadyRegistered;
+use App\Payloads\Identity\UpdateUserPayload;
 use Domain\Identity\Enums\Role;
-use Domain\Identity\Events\UserUpdated;
-use Domain\Identity\Exceptions\CannotModifyOwnAccount;
-use Domain\Identity\Exceptions\EmailAlreadyRegistered;
 use Domain\Identity\Models\User;
-use Domain\Identity\Payloads\UpdateUserPayload;
 
 final readonly class UpdateUserAction
 {
