@@ -6,8 +6,8 @@ namespace App\Http\Controllers\V1\Identity;
 
 use App\Actions\Identity\RegisterUserAction;
 use App\Http\Requests\V1\Identity\RegisterRequest;
+use App\Http\Resources\V1\Identity\UserResource;
 use App\Http\V1\Controllers\ApiController;
-use App\Http\V1\Resources\Identity\UserResource;
 use Symfony\Component\HttpFoundation\Response;
 
 final class RegisterController extends ApiController
