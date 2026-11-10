@@ -5,10 +5,10 @@ declare(strict_types=1);
 use App\Actions\Identity\UpdateUserAction;
 use App\Events\Identity\UserUpdated;
 use App\Exceptions\Identity\CannotModifyOwnAccount;
-use App\Exceptions\Identity\EmailAlreadyRegistered;
 use App\Payloads\Identity\UpdateUserPayload;
 use Database\Factories\UserFactory;
 use Domain\Identity\Enums\Role;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Event;
 
 it('updates the user and dispatches the changed attributes', function (): void {
@@ -81,4 +81,4 @@ it('refuses an email that belongs to another user', function (): void {
     } finally {
         Event::assertNotDispatched(UserUpdated::class);
     }
-})->throws(EmailAlreadyRegistered::class);
+})->throws(QueryException::class);

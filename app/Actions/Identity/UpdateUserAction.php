@@ -6,7 +6,6 @@ namespace App\Actions\Identity;
 
 use App\Events\Identity\UserUpdated;
 use App\Exceptions\Identity\CannotModifyOwnAccount;
-use App\Exceptions\Identity\EmailAlreadyRegistered;
 use App\Payloads\Identity\UpdateUserPayload;
 use Domain\Identity\Enums\Role;
 use Domain\Identity\Models\User;
@@ -15,21 +14,11 @@ final readonly class UpdateUserAction
 {
     /**
      * @throws CannotModifyOwnAccount
-     * @throws EmailAlreadyRegistered
      */
     public function execute(User $actor, User $user, UpdateUserPayload $payload): User
     {
         if ($actor->is($user) && $user->role !== $payload->role) {
             throw CannotModifyOwnAccount::roleChange();
-        }
-
-        $isEmailTaken = User::query()
-            ->where('email', $payload->email)
-            ->whereKeyNot($user->getKey())
-            ->exists();
-
-        if ($isEmailTaken) {
-            throw EmailAlreadyRegistered::withEmail($payload->email);
         }
 
         $user->forceFill($payload->toArray());
