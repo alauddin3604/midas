@@ -14,7 +14,7 @@ it('returns the user and dispatches an authenticated event', function (): void {
     Event::fake([UserAuthenticated::class, UserAuthenticationFailed::class]);
     $user = UserFactory::new()->create();
 
-    $authenticated = app(AuthenticateUserAction::class)->execute(
+    $authenticated = resolve(AuthenticateUserAction::class)->execute(
         new AuthenticateUserPayload($user->email, 'password'),
     );
 
@@ -28,7 +28,7 @@ it('dispatches a failed event for a wrong password', function (): void {
     $user = UserFactory::new()->create();
 
     try {
-        app(AuthenticateUserAction::class)->execute(
+        resolve(AuthenticateUserAction::class)->execute(
             new AuthenticateUserPayload($user->email, 'wrong-password'),
         );
     } finally {
@@ -41,7 +41,7 @@ it('dispatches a failed event for an unknown email', function (): void {
     Event::fake([UserAuthenticated::class, UserAuthenticationFailed::class]);
 
     try {
-        app(AuthenticateUserAction::class)->execute(
+        resolve(AuthenticateUserAction::class)->execute(
             new AuthenticateUserPayload('nobody@example.com', 'password'),
         );
     } finally {

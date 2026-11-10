@@ -16,7 +16,7 @@ it('resets the password and dispatches an event', function (): void {
     $user = UserFactory::new()->create();
     $token = Password::createToken($user);
 
-    app(ResetPasswordAction::class)->execute(
+    resolve(ResetPasswordAction::class)->execute(
         new ResetPasswordPayload($user->email, $token, 'new-secret-password'),
     );
 
@@ -29,7 +29,7 @@ it('refuses an invalid token without dispatching an event', function (): void {
     $user = UserFactory::new()->create();
 
     try {
-        app(ResetPasswordAction::class)->execute(
+        resolve(ResetPasswordAction::class)->execute(
             new ResetPasswordPayload($user->email, 'invalid-token', 'new-secret-password'),
         );
     } finally {
@@ -42,7 +42,7 @@ it('revokes every API token of the user', function (): void {
     $user->createToken('phone');
     $user->createToken('laptop');
 
-    app(ResetPasswordAction::class)->execute(
+    resolve(ResetPasswordAction::class)->execute(
         new ResetPasswordPayload($user->email, Password::createToken($user), 'new-secret-password'),
     );
 

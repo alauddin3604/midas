@@ -16,7 +16,7 @@ it('deletes the user and dispatches an event naming the actor', function (): voi
     $actor = UserFactory::new()->admin()->create();
     $user = UserFactory::new()->create();
 
-    app(DeleteUserAction::class)->execute($actor, $user);
+    resolve(DeleteUserAction::class)->execute($actor, $user);
 
     assertModelMissing($user);
     Event::assertDispatched(
@@ -32,7 +32,7 @@ it('refuses to delete its own account', function (): void {
     $actor = UserFactory::new()->admin()->create();
 
     try {
-        app(DeleteUserAction::class)->execute($actor, $actor);
+        resolve(DeleteUserAction::class)->execute($actor, $actor);
     } finally {
         Event::assertNotDispatched(UserDeleted::class);
     }
@@ -43,7 +43,7 @@ it('revokes the API tokens of the deleted user', function (): void {
     $user = UserFactory::new()->create();
     $user->createToken('phone');
 
-    app(DeleteUserAction::class)->execute($actor, $user);
+    resolve(DeleteUserAction::class)->execute($actor, $user);
 
     assertDatabaseCount('personal_access_tokens', 0);
 });

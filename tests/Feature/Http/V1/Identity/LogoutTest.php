@@ -22,7 +22,7 @@ it('rejects the token after it has been revoked', function () {
 
     withToken($token)->postJson(route('v1.logout'))->assertNoContent();
 
-    app('auth')->forgetGuards();
+    resolve('auth')->forgetGuards();
 
     withToken($token)->postJson(route('v1.logout'))->assertUnauthorized();
 });

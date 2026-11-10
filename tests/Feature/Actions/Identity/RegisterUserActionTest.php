@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use function Pest\Laravel\assertDatabaseHas;
 
 it('registers a member with a hashed password', function () {
-    $user = app(RegisterUserAction::class)->execute(
+    $user = resolve(RegisterUserAction::class)->execute(
         new RegisterUserPayload('Jane Doe', 'jane@example.com', 'secret-password'),
     );
 
@@ -24,7 +24,7 @@ it('registers a member with a hashed password', function () {
 });
 
 it('registers a user with the requested role', function () {
-    $user = app(RegisterUserAction::class)->execute(
+    $user = resolve(RegisterUserAction::class)->execute(
         new RegisterUserPayload('Jane Doe', 'jane@example.com', 'secret-password', Role::Admin),
     );
 
@@ -34,7 +34,7 @@ it('registers a user with the requested role', function () {
 it('dispatches a registered event', function () {
     Event::fake([UserRegistered::class]);
 
-    $user = app(RegisterUserAction::class)->execute(
+    $user = resolve(RegisterUserAction::class)->execute(
         new RegisterUserPayload('Jane Doe', 'jane@example.com', 'secret-password', Role::Admin),
     );
 
@@ -49,7 +49,7 @@ it('dispatches a registered event', function () {
 it('refuses to register a duplicate email', function () {
     User::factory()->create(['email' => 'jane@example.com']);
 
-    app(RegisterUserAction::class)->execute(
+    resolve(RegisterUserAction::class)->execute(
         new RegisterUserPayload('Jane Doe', 'jane@example.com', 'secret-password'),
     );
 })->throws(QueryException::class);
