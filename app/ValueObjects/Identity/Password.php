@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\ValueObjects;
+namespace App\ValueObjects\Identity;
 
 use Illuminate\Support\Str;
 use InvalidArgumentException;

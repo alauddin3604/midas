@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Requests\V1\Identity;
 
 use App\Payloads\Identity\UpdateUserPasswordPayload;
-use Domain\Identity\ValueObjects\Password;
+use App\ValueObjects\Identity\Password;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password as RulesPassword;

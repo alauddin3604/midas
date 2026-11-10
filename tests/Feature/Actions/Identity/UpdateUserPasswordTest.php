@@ -7,8 +7,8 @@ use App\Events\Identity\PasswordUpdated;
 use App\Exceptions\Identity\PasswordUpdateFailed;
 use App\Models\Identity\User;
 use App\Payloads\Identity\UpdateUserPasswordPayload;
+use App\ValueObjects\Identity\Password;
 use Database\Factories\UserFactory;
-use Domain\Identity\ValueObjects\Password;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 

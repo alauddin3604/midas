@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Domain\Identity\ValueObjects\Password;
+use App\ValueObjects\Identity\Password;
 
 it('throws an exception when password is empty', function (): void {
     Password::fromString('');
