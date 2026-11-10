@@ -9,6 +9,7 @@ use App\Models\Identity\User;
 use App\Payloads\Identity\UpdateUserPasswordPayload;
 use App\ValueObjects\Identity\Password;
 use Database\Factories\UserFactory;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 
@@ -21,7 +22,7 @@ it('can update user password', function (): void {
 
     expect($user->password_changed_at)->toBeNull('Password changed timestamp should be null before the password update.');
 
-    resolve(UpdateUserPasswordAction::class)->execute($user, $payload);
+    App::make(UpdateUserPasswordAction::class)->execute($user, $payload);
 
     expect($user->password_changed_at)->not()->toBeNull('Password changed timestamp should not be null after the password update.');
     expect($user->password)->not()->toBe('NewPassw0rd', 'Password should be hashed and not stored in plain text.');
@@ -37,7 +38,7 @@ it('dispatches PasswordUpdated event after password update', function (): void {
         password: Password::fromString('AnotherPassw0rd'),
     );
 
-    resolve(UpdateUserPasswordAction::class)->execute($user, $payload);
+    App::make(UpdateUserPasswordAction::class)->execute($user, $payload);
 
     Event::assertDispatched(PasswordUpdated::class, [
         'userId' => $user->id,
@@ -53,7 +54,7 @@ it('throws an exception when trying to update password for a non-existent user',
         password: Password::fromString('SomePassw0rd'),
     );
 
-    resolve(UpdateUserPasswordAction::class)->execute($nonExistentUser, $payload);
+    App::make(UpdateUserPasswordAction::class)->execute($nonExistentUser, $payload);
 
     Event::assertNotDispatched(PasswordUpdated::class, [
         'userId' => $nonExistentUser->id,

@@ -9,9 +9,12 @@ use App\Events\Identity\UserUpdated;
 use App\Exceptions\Identity\CannotModifyOwnAccount;
 use App\Models\Identity\User;
 use App\Payloads\Identity\UpdateUserPayload;
+use Illuminate\Events\Dispatcher;
 
 final readonly class UpdateUserAction
 {
+    public function __construct(private Dispatcher $dispatcher) {}
+
     /**
      * @throws CannotModifyOwnAccount
      */
@@ -32,7 +35,7 @@ final readonly class UpdateUserAction
         $user->save();
 
         if ($changes !== []) {
-            event(new UserUpdated($user->id, $actor->id, $changes));
+            $this->dispatcher->dispatch(new UserUpdated($user->id, $actor->id, $changes));
         }
 
         return $user;

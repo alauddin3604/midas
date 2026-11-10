@@ -8,14 +8,19 @@ use App\Actions\Identity\DeleteAccessTokenAction;
 use App\Http\Controllers\V1\ApiController;
 use App\Models\Identity\User;
 use Illuminate\Container\Attributes\CurrentUser;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Symfony\Component\HttpFoundation\Response;
 
 final class LogoutController extends ApiController
 {
+    public function __construct(
+        private readonly ResponseFactory $response,
+    ) {}
+
     public function __invoke(#[CurrentUser] User $user, DeleteAccessTokenAction $action): Response
     {
         $action->execute($user->currentAccessToken());
 
-        return response()->noContent();
+        return $this->response->noContent();
     }
 }

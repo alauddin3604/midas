@@ -9,11 +9,16 @@ use App\Http\Controllers\V1\ApiController;
 use App\Http\Requests\V1\Identity\UpdateUserRequest;
 use App\Models\Identity\User;
 use Illuminate\Container\Attributes\CurrentUser;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Routing\Attributes\Controllers\Authorize;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateUserController extends ApiController
 {
+    public function __construct(
+        private readonly ResponseFactory $response,
+    ) {}
+
     #[Authorize('update', 'user')]
     public function __invoke(
         #[CurrentUser]
@@ -24,6 +29,6 @@ final class UpdateUserController extends ApiController
     ): Response {
         $action->execute($actor, $user, $request->toPayload());
 
-        return response()->noContent();
+        return $this->response->noContent();
     }
 }

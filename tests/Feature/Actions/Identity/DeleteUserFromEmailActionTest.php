@@ -7,6 +7,7 @@ use App\Events\Identity\UserDeleted;
 use App\Models\Identity\User;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 
 use function Pest\Laravel\assertDatabaseCount;
@@ -18,7 +19,7 @@ it('can delete a user from email', function (): void {
 
     assertModelExists($user);
 
-    $action = resolve(DeleteUserFromEmailAction::class);
+    $action = App::make(DeleteUserFromEmailAction::class);
     $action->execute($user->email);
 
     assertModelMissing($user);
@@ -28,7 +29,7 @@ it('dispatches a deleted event without an actor', function (): void {
     Event::fake([UserDeleted::class]);
     $user = UserFactory::new()->create();
 
-    resolve(DeleteUserFromEmailAction::class)->execute($user->email);
+    App::make(DeleteUserFromEmailAction::class)->execute($user->email);
 
     Event::assertDispatched(
         UserDeleted::class,
@@ -39,7 +40,7 @@ it('dispatches a deleted event without an actor', function (): void {
 });
 
 it('cannot delete user from non exist email', function (): void {
-    $action = resolve(DeleteUserFromEmailAction::class);
+    $action = App::make(DeleteUserFromEmailAction::class);
     $action->execute('joe@example.com');
 })->throws(
     ModelNotFoundException::class,
@@ -50,7 +51,7 @@ it('revokes the API tokens of the deleted user', function (): void {
     $user = UserFactory::new()->create();
     $user->createToken('phone');
 
-    resolve(DeleteUserFromEmailAction::class)->execute($user->email);
+    App::make(DeleteUserFromEmailAction::class)->execute($user->email);
 
     assertDatabaseCount('personal_access_tokens', 0);
 });

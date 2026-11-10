@@ -7,6 +7,7 @@ use App\Events\Identity\PasswordReset;
 use App\Exceptions\Identity\InvalidPasswordResetToken;
 use App\Payloads\Identity\ResetPasswordPayload;
 use Database\Factories\UserFactory;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -16,7 +17,7 @@ it('resets the password and dispatches an event', function (): void {
     $user = UserFactory::new()->create();
     $token = Password::createToken($user);
 
-    resolve(ResetPasswordAction::class)->execute(
+    App::make(ResetPasswordAction::class)->execute(
         new ResetPasswordPayload($user->email, $token, 'new-secret-password'),
     );
 
@@ -29,7 +30,7 @@ it('refuses an invalid token without dispatching an event', function (): void {
     $user = UserFactory::new()->create();
 
     try {
-        resolve(ResetPasswordAction::class)->execute(
+        App::make(ResetPasswordAction::class)->execute(
             new ResetPasswordPayload($user->email, 'invalid-token', 'new-secret-password'),
         );
     } finally {
@@ -42,7 +43,7 @@ it('revokes every API token of the user', function (): void {
     $user->createToken('phone');
     $user->createToken('laptop');
 
-    resolve(ResetPasswordAction::class)->execute(
+    App::make(ResetPasswordAction::class)->execute(
         new ResetPasswordPayload($user->email, Password::createToken($user), 'new-secret-password'),
     );
 

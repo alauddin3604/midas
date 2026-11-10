@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Identity\User;
+use Illuminate\Support\Facades\App;
 
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\postJson;
@@ -22,7 +23,7 @@ it('rejects the token after it has been revoked', function () {
 
     withToken($token)->postJson(route('v1.logout'))->assertNoContent();
 
-    resolve('auth')->forgetGuards();
+    App::make('auth')->forgetGuards();
 
     withToken($token)->postJson(route('v1.logout'))->assertUnauthorized();
 });

@@ -9,7 +9,7 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Factory;
 
 use function is_string;
 
@@ -17,6 +17,14 @@ use function is_string;
 #[Description('Delete a user from an email')]
 final class DeleteUserCommand extends Command
 {
+    /**
+     * Create a new console command instance.
+     */
+    public function __construct(private readonly Factory $factory)
+    {
+        parent::__construct();
+    }
+
     /**
      * Execute the console command.
      */
@@ -30,7 +38,7 @@ final class DeleteUserCommand extends Command
             return self::FAILURE;
         }
 
-        $validator = Validator::make([
+        $validator = $this->factory->make([
             'email' => $email,
         ], [
             'email' => ['email'],

@@ -8,10 +8,15 @@ use App\Actions\Identity\DeleteUserAction;
 use App\Http\Controllers\V1\ApiController;
 use App\Models\Identity\User;
 use Illuminate\Container\Attributes\CurrentUser;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Symfony\Component\HttpFoundation\Response;
 
 final class DeleteUserController extends ApiController
 {
+    public function __construct(
+        private readonly ResponseFactory $response,
+    ) {}
+
     /**
      * Handle the incoming request.
      */
@@ -19,6 +24,6 @@ final class DeleteUserController extends ApiController
     {
         $action->execute($actor, $user);
 
-        return response()->noContent();
+        return $this->response->noContent();
     }
 }

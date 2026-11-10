@@ -6,6 +6,7 @@ use App\Actions\Identity\DeleteUserAction;
 use App\Events\Identity\UserDeleted;
 use App\Exceptions\Identity\CannotModifyOwnAccount;
 use Database\Factories\UserFactory;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 
 use function Pest\Laravel\assertDatabaseCount;
@@ -16,7 +17,7 @@ it('deletes the user and dispatches an event naming the actor', function (): voi
     $actor = UserFactory::new()->admin()->create();
     $user = UserFactory::new()->create();
 
-    resolve(DeleteUserAction::class)->execute($actor, $user);
+    App::make(DeleteUserAction::class)->execute($actor, $user);
 
     assertModelMissing($user);
     Event::assertDispatched(
@@ -32,7 +33,7 @@ it('refuses to delete its own account', function (): void {
     $actor = UserFactory::new()->admin()->create();
 
     try {
-        resolve(DeleteUserAction::class)->execute($actor, $actor);
+        App::make(DeleteUserAction::class)->execute($actor, $actor);
     } finally {
         Event::assertNotDispatched(UserDeleted::class);
     }
@@ -43,7 +44,7 @@ it('revokes the API tokens of the deleted user', function (): void {
     $user = UserFactory::new()->create();
     $user->createToken('phone');
 
-    resolve(DeleteUserAction::class)->execute($actor, $user);
+    App::make(DeleteUserAction::class)->execute($actor, $user);
 
     assertDatabaseCount('personal_access_tokens', 0);
 });

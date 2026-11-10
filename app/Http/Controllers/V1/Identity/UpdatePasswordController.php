@@ -9,10 +9,15 @@ use App\Http\Controllers\V1\ApiController;
 use App\Http\Requests\V1\Identity\UpdateUserPasswordRequest;
 use App\Models\Identity\User;
 use Illuminate\Container\Attributes\CurrentUser;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Symfony\Component\HttpFoundation\Response;
 
 final class UpdatePasswordController extends ApiController
 {
+    public function __construct(
+        private readonly ResponseFactory $response,
+    ) {}
+
     public function __invoke(
         #[CurrentUser]
         User $user,
@@ -21,6 +26,6 @@ final class UpdatePasswordController extends ApiController
     ): Response {
         $action->execute($user, $request->toPayload());
 
-        return response()->noContent();
+        return $this->response->noContent();
     }
 }

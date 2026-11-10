@@ -10,11 +10,15 @@ use App\Models\Identity\User;
 use App\Payloads\Identity\ResetPasswordPayload;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Str;
 
 final readonly class ResetPasswordAction
 {
-    public function __construct(private PasswordBroker $broker) {}
+    public function __construct(
+        private PasswordBroker $broker,
+        private Dispatcher $dispatcher,
+    ) {}
 
     /**
      * @throws InvalidPasswordResetToken
@@ -32,7 +36,7 @@ final readonly class ResetPasswordAction
 
                 $user->tokens()->delete();
 
-                event(new PasswordReset($user->id));
+                $this->dispatcher->dispatch(new PasswordReset($user->id));
             },
         );
 

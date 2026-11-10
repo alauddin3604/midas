@@ -9,11 +9,15 @@ use App\Events\Identity\UserAuthenticationFailed;
 use App\Exceptions\Identity\InvalidCredentials;
 use App\Models\Identity\User;
 use App\Payloads\Identity\AuthenticateUserPayload;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Hashing\Hasher;
 
 final readonly class AuthenticateUserAction
 {
-    public function __construct(private Hasher $hasher) {}
+    public function __construct(
+        private Hasher $hasher,
+        private Dispatcher $dispatcher,
+    ) {}
 
     /**
      * @throws InvalidCredentials
@@ -23,12 +27,12 @@ final readonly class AuthenticateUserAction
         $user = User::query()->where('email', $payload->email)->first();
 
         if ($user === null || ! $this->hasher->check($payload->password, $user->password)) {
-            event(new UserAuthenticationFailed($payload->email));
+            $this->dispatcher->dispatch(new UserAuthenticationFailed($payload->email));
 
             throw InvalidCredentials::provided();
         }
 
-        event(new UserAuthenticated($user->id));
+        $this->dispatcher->dispatch(new UserAuthenticated($user->id));
 
         return $user;
     }

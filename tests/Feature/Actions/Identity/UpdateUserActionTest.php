@@ -9,6 +9,7 @@ use App\Exceptions\Identity\CannotModifyOwnAccount;
 use App\Payloads\Identity\UpdateUserPayload;
 use Database\Factories\UserFactory;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 
 it('updates the user and dispatches the changed attributes', function (): void {
@@ -16,7 +17,7 @@ it('updates the user and dispatches the changed attributes', function (): void {
     $actor = UserFactory::new()->admin()->create();
     $user = UserFactory::new()->create(['name' => 'Old Name', 'email' => 'old@example.com']);
 
-    resolve(UpdateUserAction::class)->execute(
+    App::make(UpdateUserAction::class)->execute(
         $actor,
         $user,
         new UpdateUserPayload('New Name', 'old@example.com', Role::Admin),
@@ -42,7 +43,7 @@ it('does not dispatch an event when nothing changed', function (): void {
     $actor = UserFactory::new()->admin()->create();
     $user = UserFactory::new()->create();
 
-    resolve(UpdateUserAction::class)->execute(
+    App::make(UpdateUserAction::class)->execute(
         $actor,
         $user,
         new UpdateUserPayload($user->name, $user->email, $user->role),
@@ -56,7 +57,7 @@ it('refuses to change its own role', function (): void {
     $actor = UserFactory::new()->admin()->create();
 
     try {
-        resolve(UpdateUserAction::class)->execute(
+        App::make(UpdateUserAction::class)->execute(
             $actor,
             $actor,
             new UpdateUserPayload($actor->name, $actor->email, Role::Member),
@@ -73,7 +74,7 @@ it('refuses an email that belongs to another user', function (): void {
     $other = UserFactory::new()->create();
 
     try {
-        resolve(UpdateUserAction::class)->execute(
+        App::make(UpdateUserAction::class)->execute(
             $actor,
             $user,
             new UpdateUserPayload($user->name, $other->email, $user->role),
