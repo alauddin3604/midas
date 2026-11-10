@@ -6,6 +6,7 @@ use App\Http\Controllers\V1\ApiController;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
 arch('Actions are final, readonly classes suffixed with Action')
@@ -36,6 +37,13 @@ arch('API controllers are final, invokable and extend ApiController')
     ->toBeInvokable()
     ->toExtend(ApiController::class)
     ->toHaveSuffix('Controller');
+
+arch('HTTP requests are final, suffixed with Request and extend FormRequest')
+    ->expect('App\Http\Requests')
+    ->toBeClasses()
+    ->toBeFinal()
+    ->toExtend(FormRequest::class)
+    ->toHaveSuffix('Request');
 
 arch('Enums must be enums')
     ->expect('App\Enums')
