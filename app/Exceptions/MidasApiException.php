@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
+use App\Support\Utils\ApiErrorResponse;
 use Exception;
-use Support\Utils\ApiErrorResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 

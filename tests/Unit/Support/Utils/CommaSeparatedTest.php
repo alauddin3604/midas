@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Support\Utils\CommaSeparated;
+use App\Support\Utils\CommaSeparated;
 
 use function PHPUnit\Framework\assertSame;
 
