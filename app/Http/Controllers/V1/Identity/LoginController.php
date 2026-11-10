@@ -8,6 +8,7 @@ use App\Actions\Identity\AuthenticateUserAction;
 use App\Exceptions\Identity\InvalidCredentials;
 use App\Http\Controllers\V1\ApiController;
 use App\Http\Requests\V1\Identity\LoginRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ final class LoginController extends ApiController
 
         $token = $user->createToken(Str::limit($request->userAgent() ?? $user->email, 255, ''));
 
-        return response()->json([
+        return new JsonResponse([
             'data' => [
                 'token' => $token->plainTextToken,
             ],
