@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\V1\Requests\Identity;
+namespace App\Http\Requests\V1\Identity;
 
 use App\Payloads\Identity\UpdateUserPasswordPayload;
 use Domain\Identity\ValueObjects\Password;
