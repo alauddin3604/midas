@@ -9,7 +9,7 @@ use App\Events\Identity\UserUpdated;
 use App\Exceptions\Identity\CannotModifyOwnAccount;
 use App\Models\Identity\User;
 use App\Payloads\Identity\UpdateUserPayload;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 
 final readonly class UpdateUserAction
 {

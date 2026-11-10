@@ -7,7 +7,7 @@ namespace App\Actions\Identity;
 use App\Events\Identity\UserRegistered;
 use App\Models\Identity\User;
 use App\Payloads\Identity\RegisterUserPayload;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 
 final readonly class RegisterUserAction
 {

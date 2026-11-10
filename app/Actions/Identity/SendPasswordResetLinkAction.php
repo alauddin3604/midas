@@ -7,7 +7,7 @@ namespace App\Actions\Identity;
 use App\Events\Identity\PasswordResetLinkRequested;
 use App\Payloads\Identity\SendPasswordResetLinkPayload;
 use Illuminate\Contracts\Auth\PasswordBroker;
-use Illuminate\Events\Dispatcher;
+use Illuminate\Contracts\Events\Dispatcher;
 
 final readonly class SendPasswordResetLinkAction
 {

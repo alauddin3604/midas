@@ -8,9 +8,9 @@ use App\Events\Identity\PasswordUpdated;
 use App\Exceptions\Identity\PasswordUpdateFailed;
 use App\Models\Identity\User;
 use App\Payloads\Identity\UpdateUserPasswordPayload;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\QueryException;
-use Illuminate\Events\Dispatcher;
 
 final readonly class UpdateUserPasswordAction
 {
