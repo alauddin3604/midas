@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\V1\ApiController;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 arch('Actions are final, readonly classes suffixed with Action')
     ->expect('App\Actions')
@@ -13,6 +14,12 @@ arch('Actions are final, readonly classes suffixed with Action')
     ->toBeReadonly()
     ->toHaveSuffix('Action')
     ->toHaveMethod('execute');
+
+arch('Actions are not using Request object')
+    ->expect('App\Actions')
+    ->not->toUse([
+        Request::class,
+    ]);
 
 arch('console commands are final and extend Command')
     ->expect('App\Console\Commands')
