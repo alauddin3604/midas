@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use App\Actions\Identity\UpdateUserAction;
+use App\Enums\Identity\Role;
 use App\Events\Identity\UserUpdated;
 use App\Exceptions\Identity\CannotModifyOwnAccount;
 use App\Payloads\Identity\UpdateUserPayload;
 use Database\Factories\UserFactory;
-use Domain\Identity\Enums\Role;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Event;
 

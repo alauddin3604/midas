@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Enums\Identity\Permission;
 use App\Models\Identity\User;
 use App\Policies\Identity\UserPolicy;
-use Domain\Identity\Enums\Permission;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 

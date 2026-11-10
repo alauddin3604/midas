@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Policies\Identity;
 
+use App\Enums\Identity\Permission;
 use App\Models\Identity\User;
-use Domain\Identity\Enums\Permission;
 
 class UserPolicy
 {

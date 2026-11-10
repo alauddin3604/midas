@@ -1,7 +1,7 @@
 <?php
 
-use Domain\Identity\Enums\Permission;
-use Domain\Identity\Enums\Role;
+use App\Enums\Identity\Permission;
+use App\Enums\Identity\Role;
 
 it('grants every permission to an admin', function () {
     foreach (Permission::cases() as $permission) {

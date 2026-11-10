@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Enums\Identity\Role;
 use App\Events\Identity\UserUpdated;
 use App\Models\Identity\User;
-use Domain\Identity\Enums\Role;
 use Illuminate\Support\Facades\Event;
 use Laravel\Sanctum\Sanctum;
 

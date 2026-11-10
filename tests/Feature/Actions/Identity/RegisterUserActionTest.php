@@ -1,10 +1,10 @@
 <?php
 
 use App\Actions\Identity\RegisterUserAction;
+use App\Enums\Identity\Role;
 use App\Events\Identity\UserRegistered;
 use App\Models\Identity\User;
 use App\Payloads\Identity\RegisterUserPayload;
-use Domain\Identity\Enums\Role;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;

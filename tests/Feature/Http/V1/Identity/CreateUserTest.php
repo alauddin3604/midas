@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Domain\Identity\Enums\Role;
+use App\Enums\Identity\Role;
 use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\postJson;

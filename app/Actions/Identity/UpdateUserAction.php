@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Actions\Identity;
 
+use App\Enums\Identity\Role;
 use App\Events\Identity\UserUpdated;
 use App\Exceptions\Identity\CannotModifyOwnAccount;
 use App\Models\Identity\User;
 use App\Payloads\Identity\UpdateUserPayload;
-use Domain\Identity\Enums\Role;
 
 final readonly class UpdateUserAction
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\Identity\Enums;
+namespace App\Enums\Identity;
 
 use function in_array;
 

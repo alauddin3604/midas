@@ -1,8 +1,8 @@
 <?php
 
+use App\Enums\Identity\Role;
 use App\Models\Identity\User;
 use Database\Factories\UserFactory;
-use Domain\Identity\Enums\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;

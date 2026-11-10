@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\V1\Identity;
 
+use App\Enums\Identity\Role;
 use App\Payloads\Identity\UpdateUserPayload;
-use Domain\Identity\Enums\Role;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

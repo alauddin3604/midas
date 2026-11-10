@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Enums\Identity\Role;
 use App\Payloads\Identity\RegisterUserPayload;
-use Domain\Identity\Enums\Role;
 
 it('can convert register user payload to array', function (): void {
     $payload = new RegisterUserPayload(

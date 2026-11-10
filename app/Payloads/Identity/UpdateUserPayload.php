@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Payloads\Identity;
 
-use Domain\Identity\Enums\Role;
+use App\Enums\Identity\Role;
 use Illuminate\Contracts\Support\Arrayable;
 use Override;
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models\Identity;
 
+use App\Enums\Identity\Role;
 use App\QueryBuilders\Identity\UserQueryBuilder;
 use Database\Factories\UserFactory;
-use Domain\Identity\Enums\Role;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\Table;
