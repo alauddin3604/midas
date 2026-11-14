@@ -11,20 +11,12 @@ use Throwable;
 
 abstract class MidasApiException extends Exception
 {
-    /**
-     * The HTTP status code.
-     */
-    private int $statusCode;
-
     public function __construct(
         string $message,
-        int $statusCode = Response::HTTP_BAD_REQUEST,
-        int $code = 0,
+        protected readonly int $statusCode = Response::HTTP_BAD_REQUEST,
         ?Throwable $previous = null,
     ) {
-        parent::__construct($message, $code, $previous);
-
-        $this->statusCode = $statusCode;
+        parent::__construct($message, 0, $previous);
     }
 
     public function render(): Response

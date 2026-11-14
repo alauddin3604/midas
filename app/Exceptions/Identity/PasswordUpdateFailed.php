@@ -12,6 +12,6 @@ final class PasswordUpdateFailed extends MidasApiException
 {
     public static function withMessage(string $message, Throwable $previous): self
     {
-        return new self($message, Response::HTTP_INTERNAL_SERVER_ERROR, 0, $previous);
+        return new self($message, Response::HTTP_INTERNAL_SERVER_ERROR, $previous);
     }
 }
