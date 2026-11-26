@@ -2,27 +2,35 @@
 
 declare(strict_types=1);
 
-use App\Exceptions\MidasApiException;
-use App\Support\Utils\ApiErrorResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
+use Interface\Identity\Api\Exceptions\IdentityExceptionMapper;
+use Interface\Identity\Console\DeleteUserCommand;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-return Application::configure(basePath: dirname(__DIR__))
+$app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        api: __DIR__.'/../routes/api.php',
         apiPrefix: '',
         health: '/up',
+        then: function (): void {
+            foreach (glob(base_path('src/Interface/*/Api/V1/routes.php')) ?: [] as $file) {
+                Route::middleware(['api', 'auth:sanctum'])
+                    ->prefix('v1')
+                    ->name('v1.')
+                    ->group($file);
+            }
+        },
     )
     ->withCommands([
-        __DIR__.'/../src/App/Console/Commands',
+        DeleteUserCommand::class,
     ])
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo(fn (): null => null);
@@ -31,19 +39,26 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(fn (): bool => true);
 
         $exceptions->dontReport([
-            MidasApiException::class,
+            DomainException::class,
         ]);
 
+        $mappers = [
+            IdentityExceptionMapper::class,
+        ];
+
+        foreach ($mappers as $mapper) {
+            (new $mapper)($exceptions);
+        }
+
         $exceptions->render(function (ValidationException $e): JsonResponse {
-            return ApiErrorResponse::make(
-                message: 'Validation failed.',
-                status: $e->status,
-                errors: $e->errors(),
-            );
+            return new JsonResponse([
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(),
+            ], $e->status);
         });
 
-        $exceptions->render(fn (AuthenticationException $e): JsonResponse => ApiErrorResponse::make(
-            'Unauthenticated.',
+        $exceptions->render(fn (AuthenticationException $e): JsonResponse => new JsonResponse(
+            ['message' => 'Unauthenticated.'],
             Response::HTTP_UNAUTHORIZED,
         ));
 
@@ -59,8 +74,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 default => 'Error.',
             };
 
-            return ApiErrorResponse::make(
-                message: $message,
+            return new JsonResponse(
+                data: ['message' => $message],
                 status: $e->getStatusCode(),
                 headers: $e->getHeaders(),
             );
@@ -71,9 +86,10 @@ return Application::configure(basePath: dirname(__DIR__))
                 return null;
             }
 
-            return ApiErrorResponse::make(
-                'Unexpected exception occured.',
-                Response::HTTP_INTERNAL_SERVER_ERROR,
-            );
+            return new JsonResponse([
+                'message' => 'Unexpected exception occured.',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         });
     })->create();
+
+return $app->useAppPath(__DIR__.'../src/Application');

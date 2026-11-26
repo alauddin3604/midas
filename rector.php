@@ -20,7 +20,7 @@ return RectorConfig::configure()
         __DIR__.'/storage',
         __DIR__.'/vendor',
         StaticFacadeToServiceMethodCallRector::class => [
-            __DIR__.'/app/Providers',
+            '*/Providers/*',
         ],
     ])
     ->withComposerBased(

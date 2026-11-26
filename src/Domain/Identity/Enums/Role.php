@@ -1,0 +1,34 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Domain\Identity\Enums;
+
+use function in_array;
+
+enum Role: string
+{
+    case Admin = 'admin';
+    case Member = 'member';
+
+    /**
+     * @return list<Permission>
+     */
+    public function permissions(): array
+    {
+        return match ($this) {
+            self::Admin => Permission::cases(),
+            self::Member => [],
+        };
+    }
+
+    public function grants(Permission $permission): bool
+    {
+        return in_array($permission, $this->permissions(), true);
+    }
+
+    public function label(): string
+    {
+        return ucfirst($this->value);
+    }
+}

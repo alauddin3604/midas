@@ -1,13 +1,11 @@
 <?php
 
-use App\Enums\Identity\Role;
-use App\Models\Identity\User;
 use Database\Factories\UserFactory;
+use Domain\Identity\Enums\Role;
+use Domain\Identity\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
-
-require_once __DIR__.'/Helpers/ticketing.php';
 
 /*
 |--------------------------------------------------------------------------

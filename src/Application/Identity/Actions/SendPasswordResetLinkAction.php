@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Application\Identity\Actions;
+
+use Application\Identity\Payloads\SendPasswordResetLinkPayload;
+use Domain\Identity\Events\PasswordResetLinkRequested;
+use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Contracts\Events\Dispatcher;
+
+final readonly class SendPasswordResetLinkAction
+{
+    public function __construct(
+        private PasswordBroker $broker,
+        private Dispatcher $dispatcher,
+    ) {}
+
+    /**
+     * Never reveals whether the email belongs to an account.
+     */
+    public function execute(SendPasswordResetLinkPayload $payload): void
+    {
+        $this->broker->sendResetLink(['email' => $payload->email]);
+
+        $this->dispatcher->dispatch(new PasswordResetLinkRequested($payload->email));
+    }
+}

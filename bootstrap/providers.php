@@ -1,7 +1,7 @@
 <?php
 
 use App\Providers\AppServiceProvider;
-use App\Providers\IdentityServiceProvider;
+use Infrastructure\Identity\Providers\IdentityServiceProvider;
 
 return [
     AppServiceProvider::class,

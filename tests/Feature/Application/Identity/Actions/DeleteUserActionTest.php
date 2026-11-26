@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+use Application\Identity\Actions\DeleteUserAction;
+use Application\Identity\Exceptions\CannotModifyOwnAccount;
+use Database\Factories\UserFactory;
+use Domain\Identity\Events\UserDeleted;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Event;
+
+use function Pest\Laravel\assertDatabaseCount;
+use function Pest\Laravel\assertModelMissing;
+
+it('deletes the user and dispatches an event naming the actor', function (): void {
+    Event::fake([UserDeleted::class]);
+    $actor = UserFactory::new()->admin()->create();
+    $user = UserFactory::new()->create();
+
+    App::make(DeleteUserAction::class)->execute($actor, $user);
+
+    assertModelMissing($user);
+    Event::assertDispatched(
+        UserDeleted::class,
+        fn (UserDeleted $event): bool => $event->userId === $user->id
+            && $event->email === $user->email
+            && $event->actorId === $actor->id,
+    );
+});
+
+it('refuses to delete its own account', function (): void {
+    Event::fake([UserDeleted::class]);
+    $actor = UserFactory::new()->admin()->create();
+
+    try {
+        App::make(DeleteUserAction::class)->execute($actor, $actor);
+    } finally {
+        Event::assertNotDispatched(UserDeleted::class);
+    }
+})->throws(CannotModifyOwnAccount::class);
+
+it('revokes the API tokens of the deleted user', function (): void {
+    $actor = UserFactory::new()->admin()->create();
+    $user = UserFactory::new()->create();
+    $user->createToken('phone');
+
+    App::make(DeleteUserAction::class)->execute($actor, $user);
+
+    assertDatabaseCount('personal_access_tokens', 0);
+});
