@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -57,11 +56,6 @@ $app = Application::configure(basePath: dirname(__DIR__))
             ], $e->status);
         });
 
-        $exceptions->render(fn (AuthenticationException $e): JsonResponse => new JsonResponse(
-            ['message' => 'Unauthenticated.'],
-            Response::HTTP_UNAUTHORIZED,
-        ));
-
         $exceptions->render(function (HttpExceptionInterface $e): ?JsonResponse {
             if ($e->getStatusCode() >= Response::HTTP_INTERNAL_SERVER_ERROR) {
                 return null;
@@ -77,7 +71,7 @@ $app = Application::configure(basePath: dirname(__DIR__))
             return new JsonResponse(
                 data: ['message' => $message],
                 status: $e->getStatusCode(),
-                headers: $e->getHeaders(),
+                headers: [...$e->getHeaders(), 'Content-Type' => 'application/problem+json'],
             );
         });
 
@@ -88,7 +82,9 @@ $app = Application::configure(basePath: dirname(__DIR__))
 
             return new JsonResponse([
                 'message' => 'Unexpected exception occured.',
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR, [
+                'Content-Type' => 'application/problem+json',
+            ]);
         });
     })->create();
 

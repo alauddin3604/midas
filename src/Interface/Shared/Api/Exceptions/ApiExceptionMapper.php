@@ -22,7 +22,9 @@ abstract class ApiExceptionMapper
                     return null;
                 }
 
-                return new JsonResponse(['message' => $e->getMessage()], $status);
+                return new JsonResponse(['message' => $e->getMessage()], $status, [
+                    'Content-Type' => 'application/problem+json',
+                ]);
             }
         );
     }

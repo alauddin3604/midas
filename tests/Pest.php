@@ -4,6 +4,7 @@ use Database\Factories\UserFactory;
 use Domain\Identity\Enums\Role;
 use Domain\Identity\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\TestResponse;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -37,4 +38,21 @@ function actingAsAdmin(): User
     Sanctum::actingAs($user);
 
     return $user;
+}
+
+/**
+ * Assert the JSON error.
+ */
+function assertProblemJson(
+    TestResponse $response,
+    int $status,
+    string $message,
+): TestResponse {
+    return $response
+        ->assertStatus($status)
+        ->assertHeader('Content-Type', 'application/problem+json')
+        ->assertJsonStructure(['message'])
+        ->assertJsonFragment([
+            'message' => $message,
+        ]);
 }

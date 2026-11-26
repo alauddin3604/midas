@@ -21,11 +21,7 @@ it('cannot create a user if unauthorized', function (): void {
         'role' => 'member',
     ]);
 
-    $response->assertForbidden();
-
-    $response->assertJson([
-        'message' => 'This action is unauthorized.',
-    ]);
+    assertProblemJson($response, 403, 'This action is unauthorized.');
 });
 
 it('cannot create a user if the email is already registered', function (): void {
